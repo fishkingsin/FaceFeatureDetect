@@ -1,11 +1,7 @@
 #include "testApp.h"
-#define camW 640
-#define camH 480
 int minArea =  50;
 int minFaceAreaW =  50;
 int minFaceAreaH =  50;
-#define BUFFER_SIZE 256
-#define QUARTER_SIZE 0.25
 
 //--------------------------------------------------------------
 void testApp::setup(){
@@ -51,68 +47,34 @@ void testApp::setup(){
     
     
 	facefinder.setup("haarcascade_frontalface_alt2.xml");
-	leftEyefinder.setup("haarcascade_mcs_lefteye.xml");
-	rightEyefinder.setup("haarcascade_mcs_righteye.xml");
-	nosefinder.setup("haarcascade_mcs_nose.xml");
-	mouthfinder.setup("haarcascade_mcs_mouth.xml");
     
-    colorImgs.allocate(BUFFER_SIZE,BUFFER_SIZE);
-	grayImages.allocate(BUFFER_SIZE,BUFFER_SIZE);
     
-	eyeROIL.set(ofRectangle(0,QUARTER_SIZE,BUFFER_SIZE,BUFFER_SIZE*QUARTER_SIZE));
-	eyeROIR.set(ofRectangle(0,QUARTER_SIZE,BUFFER_SIZE,BUFFER_SIZE*QUARTER_SIZE));
-	noseROI.set(ofRectangle(0,BUFFER_SIZE*QUARTER_SIZE*2,BUFFER_SIZE,BUFFER_SIZE*QUARTER_SIZE));
-	mouthROI.set(ofRectangle(0,BUFFER_SIZE*QUARTER_SIZE*3,BUFFER_SIZE,BUFFER_SIZE*QUARTER_SIZE));
-	
+    colorImgFace.allocate(BUFFER_SIZE,BUFFER_SIZE);
+	grayImageFace.allocate(BUFFER_SIZE,BUFFER_SIZE);
+    
     faceBuffer.allocate(BUFFER_SIZE,BUFFER_SIZE,GL_RGB);
     facePixels.allocate(faceBuffer.getWidth(),faceBuffer.getHeight(),OF_IMAGE_COLOR);
     faceBuffer.begin();
     ofClear(0,0,0,255);
     faceBuffer.end();
-    ofMesh *temp[4];
-    temp[0] = &normEyeLeft;
-    temp[1] = &normEyeRight;
-    temp[2] = &normNose;
-    temp[3] = &normMouth;
     
-    ofFbo *temp2[4];
-    
-    temp2[0] = &lefteyeBuffer;
-    temp2[1] = &righteyeBuffer;
-    temp2[2] = &noseBuffer;
-    temp2[3] = &mouthBuffer;
-    ofxBlur *blurs[4];
-    blurs[0] = &blurLEye;
-    blurs[1] = &blurREye;
-    blurs[2] = &blurNose;
-    blurs[3] = &blurMouth;
+    //    ofxBlur *blurs[4];
+    //    blurs[0] = &blurLEye;
+    //    blurs[1] = &blurREye;
+    //    blurs[2] = &blurNose;
+    //    blurs[3] = &blurMouth;
     for(int i = 0 ; i < 4 ; i++)
     {
         if(i==0 || i==1 || i==3)
         {
-            temp2[i]->allocate(64,48,GL_RGBA);
-            blurs[i]->setup(64,48, 4, 0.2, 4);
+            blurs[i].setup(64,48, 4, 0.2, 4);
         }
         else 
         {
-            temp2[i]->allocate(48,64,GL_RGB);
-            blurs[i]->setup(48,64, 4, 0.2, 4);
+            blurs[i].setup(48,64, 4, 0.2, 4);
         }
-        blurs[i]->setScale(4);
-        blurs[i]->setRotation(0);
-        temp2[i]->begin();
-        ofClear(0,0,0,255);
-        temp2[i]->end();
-        temp[i]->addVertex(ofVec2f(0, 0));
-        temp[i]->addVertex(ofVec2f(temp2[i]->getWidth(), 0));
-        temp[i]->addVertex(ofVec2f(temp2[i]->getWidth(), temp2[i]->getHeight()));
-        temp[i]->addVertex(ofVec2f(0, temp2[i]->getHeight()));
-        temp[i]->addTexCoord(0);
-        temp[i]->addTexCoord(0);
-        temp[i]->addTexCoord(0);
-        temp[i]->addTexCoord(0);
-        temp[i]->setMode(OF_PRIMITIVE_TRIANGLE_FAN);
-        
+        blurs[i].setScale(4);
+        blurs[i].setRotation(0);
     }
     
 	normFace.addVertex(ofVec2f(0, 0));
@@ -128,43 +90,13 @@ void testApp::setup(){
 	gui.setDefaultKeys(true);
 	gui.addSlider("minFaceAreaW",minFaceAreaW,1,512);
 	gui.addSlider("minFaceAreaH",minFaceAreaH,1,512);
-	gui.addSlider("minFeatureArea",minArea,1,512);
-	
-	gui.addSlider("eyeROIL_X",eyeROIL.x,1,BUFFER_SIZE);
-	gui.addSlider("eyeROIL_W",eyeROIL.width,1,BUFFER_SIZE);
-	gui.addSlider("eyeROIL_Y",eyeROIL.y,1,BUFFER_SIZE);
-	gui.addSlider("eyeROIL_H",eyeROIL.height,1,BUFFER_SIZE);
     
-	gui.addSlider("eyeROIR_X",eyeROIR.x,1,BUFFER_SIZE);
-	gui.addSlider("eyeROIR_W",eyeROIR.width,1,BUFFER_SIZE);
-	gui.addSlider("eyeROIR_Y",eyeROIR.y,1,BUFFER_SIZE);
-	gui.addSlider("eyeROIR_H",eyeROIR.height,1,BUFFER_SIZE);
     
-	gui.addSlider("noseROI_Y",noseROI.y,1,BUFFER_SIZE);
-	gui.addSlider("noseROI_H",noseROI.height,1,BUFFER_SIZE);
+    leftEye.setup("lefteye","haarcascade_mcs_lefteye.xml","leftEyeMask.png",64,48);
+    rightEye.setup("righteye","haarcascade_mcs_righteye.xml","rightEyeMask.png",64,48);
+    nose.setup("nose","haarcascade_mcs_nose.xml","noseMask.png",48,64);
+    mouth.setup("mouth","haarcascade_mcs_mouth.xml","mouthMask.png",64,48);
     
-	gui.addSlider("mouthROI_Y",mouthROI.y,1,BUFFER_SIZE);
-	gui.addSlider("mouthROI_H",mouthROI.height,1,BUFFER_SIZE);
-    gui.addPage("ExtractOffSet");
-    gui.addSlider( "leftEyeRectOffSet.x",leftEyeRectOffSet.x,-100,100);
-    gui.addSlider( "leftEyeRectOffSet.x",leftEyeRectOffSet.y,-100,100);
-    gui.addSlider( "leftEyeRectOffSet.width",leftEyeRectOffSet.width,-100,100);
-    gui.addSlider( "leftEyeRectOffSet.height",leftEyeRectOffSet.height,-100,100);
-    
-    gui.addSlider( "rightEyeRectOffSet.x",rightEyeRectOffSet.x,-100,100);
-    gui.addSlider( "rightEyeRectOffSet.y",rightEyeRectOffSet.y,-100,100);
-    gui.addSlider( "rightEyeRectOffSet.width",rightEyeRectOffSet.width,-100,100);
-    gui.addSlider( "rightEyeRectOffSet.height",rightEyeRectOffSet.height,-100,100);
-    
-    gui.addSlider( "noseRectOffSet.x",noseRectOffSet.x,-100,100);
-    gui.addSlider( "noseRectOffSet.y",noseRectOffSet.y,-100,100);
-    gui.addSlider( "noseRectOffSet.width",noseRectOffSet.width,-100,100);
-    gui.addSlider( "noseRectOffSet.height",noseRectOffSet.height,-100,100);
-    
-    gui.addSlider( "mouthRectOffSet.x",mouthRectOffSet.x,-100,100);
-    gui.addSlider( "mouthRectOffSet.y",mouthRectOffSet.y,-100,100);
-    gui.addSlider( "mouthRectOffSet.width",mouthRectOffSet.width,-100,100);
-    gui.addSlider( "mouthRectOffSet.height",mouthRectOffSet.height,-100,100);
     
     gui.addPage("Kinect");
     gui.addSlider("nearThreshold",nearThreshold,0,255);
@@ -206,46 +138,6 @@ gl_FragColor = vec4( src , mask);\
 }";
 alphaMaskShader.setupShaderFromSource(GL_FRAGMENT_SHADER, shaderProgram);
     alphaMaskShader.linkProgram();
-    
-    
-    ofEnableArbTex();
-    ofImage leftEyeMaskImage;
-    ofImage rightEyeMaskImage;
-    ofImage noseMaskImage;
-    ofImage mouthMaskImage;
-    
-    leftEyeMaskImage.loadImage("leftEyeMask.png");
-    rightEyeMaskImage.loadImage("rightEyeMask.png");
-    noseMaskImage.loadImage("noseMask.png");
-    mouthMaskImage.loadImage("mouthMask.png");
-    
-    leftEyeMask.allocate(leftEyeMaskImage.getWidth(),leftEyeMaskImage.getHeight(),GL_RGBA);    
-    rightEyeMask.allocate(rightEyeMaskImage.getWidth(),rightEyeMaskImage.getHeight(),GL_RGBA);    
-    noseMask.allocate(noseMaskImage.getWidth(),noseMaskImage.getHeight(),GL_RGBA);    
-    mouthMask.allocate(mouthMaskImage.getWidth(),mouthMaskImage.getHeight(),GL_RGBA);    
-    
-    leftEyeMask.begin();
-    ofClear(0, 0, 0, 0);
-    leftEyeMaskImage.draw(0,0);
-    leftEyeMask.end();
-    
-    rightEyeMask.begin();
-    ofClear(0, 0, 0, 0);
-    rightEyeMaskImage.draw(0,0);
-    rightEyeMask.end();
-    
-    noseMask.begin();
-    ofClear(0, 0, 0, 0);
-    noseMaskImage.draw(0,0);
-    noseMask.end();
-    
-    mouthMask.begin();
-    ofClear(0, 0, 0, 0);
-    mouthMaskImage.draw(0,0);
-    mouthMask.end();
-    
-    ofDisableArbTex();
-    
 }
 
 //--------------------------------------------------------------
@@ -338,53 +230,15 @@ void testApp::processTracking(int x, int y , int w, int h , ofTexture &tex)
         faceBuffer.end();
         
         faceBuffer.readToPixels(facePixels);
-        colorImgs.setFromPixels(facePixels.getPixels(),BUFFER_SIZE,BUFFER_SIZE);
-        grayImages = colorImgs;
-        if(leftEyefinder.findHaarObjects(grayImages,eyeROIL,minArea,minArea)>0)
-        {
-            drawNormal(leftEyefinder,leftEyeRect,lefteyeBuffer,faceBuffer.getTextureReference(),normEyeLeft, leftEyeMask.getTextureReference(),leftEyeRectOffSet);
-        }
-        if(rightEyefinder.findHaarObjects(grayImages,eyeROIR,minArea,minArea)>0)
-        {
-            drawNormal(rightEyefinder,rightEyeRect,righteyeBuffer,faceBuffer.getTextureReference(),normEyeRight, rightEyeMask.getTextureReference(),rightEyeRectOffSet);
-        }
-        if(nosefinder.findHaarObjects(grayImages,noseROI,minArea,minArea)>0)
-        {
-            drawNormal(nosefinder,noseRect,noseBuffer,faceBuffer.getTextureReference(),normNose, noseMask.getTextureReference(),noseRectOffSet);
-            
-        }
-        if(mouthfinder.findHaarObjects(grayImages,mouthROI,minArea,minArea)>0)
-        {
-            drawNormal(mouthfinder,mouthRect,mouthBuffer,faceBuffer.getTextureReference(),normMouth, mouthMask.getTextureReference(),mouthRectOffSet);
-        }
+        colorImgFace.setFromPixels(facePixels.getPixels(),BUFFER_SIZE,BUFFER_SIZE);
+        grayImageFace = colorImgFace;
+        
+        leftEye.update(grayImageFace,faceBuffer.getTextureReference());
+        rightEye.update(grayImageFace,faceBuffer.getTextureReference());
+        nose.update(grayImageFace,faceBuffer.getTextureReference());
+        mouth.update(grayImageFace,faceBuffer.getTextureReference());
         
     }
-}
-void testApp::drawNormal(ofxCvHaarFinder &finer , ofRectangle &rect, ofFbo &fbo, ofTexture &tex , ofMesh &normal , ofTexture &mask,ofRectangle &Offset )
-{
-    ofEnableAlphaBlending();
-    ofRectangle curr = finer.blobs[0].boundingRect;
-    rect.x = curr.x+Offset.x;
-    rect.y = curr.y+Offset.y;
-    rect.width = curr.width+Offset.width;
-    rect.height = curr.height+Offset.height;
-    ofRect(rect.x, rect.y, rect.width, rect.height);
-    
-    normal.setTexCoord(0,ofVec2f(rect.x, rect.y));
-    normal.setTexCoord(1,ofVec2f(rect.x+rect.width, rect.y));
-    normal.setTexCoord(2,ofVec2f(rect.x+rect.width, rect.y+rect.height));
-    normal.setTexCoord(3,ofVec2f(rect.x, rect.y+rect.height));
-    
-    
-    
-    fbo.begin();	
-    ofClear(0, 0, 0, 0);
-    
-    tex.bind();
-    normal.draw();
-    tex.unbind();
-    
-    fbo.end();
 }
 
 //--------------------------------------------------------------
@@ -405,136 +259,68 @@ void testApp::draw(){
         ofPushMatrix();
         ofTranslate(faceRect.x, faceRect.y);
         ofScale(faceRect.width/BUFFER_SIZE, faceRect.height/BUFFER_SIZE);
-        blurLEye.begin();
-        {
-            lefteyeBuffer.draw(0,0);//,leftEyeRect.width,leftEyeRect.height);
-        }
-        blurLEye.end();
-        glPushMatrix();
-        glTranslatef(leftEyeRect.x,leftEyeRect.y,0);
-        {
-            alphaMaskShader.begin();
-            alphaMaskShader.setUniformTexture("maskTex", leftEyeMask, 1 );
-            
-
-            blurLEye.draw();
-            
-            alphaMaskShader.end();
-        }
-        glPopMatrix();
+        leftEye.drawEffect(alphaMaskShader,&blurs[0]);
+        rightEye.drawEffect(alphaMaskShader,&blurs[1]);
+        nose.drawEffect(alphaMaskShader,&blurs[2]);
+        mouth.drawEffect(alphaMaskShader,&blurs[3]);
         
-        blurREye.begin();
-        {
-            righteyeBuffer.draw(0,0);//,rightEyeRect.width,rightEyeRect.height);
-        }
-        blurREye.end();
-        glPushMatrix();
-        glTranslatef(rightEyeRect.x,rightEyeRect.y,0);
-        {
-            alphaMaskShader.begin();
-            alphaMaskShader.setUniformTexture("maskTex", rightEyeMask, 1 );
-            blurREye.draw();
-            alphaMaskShader.end();
-        }
-        glPopMatrix();
+        //        blurs[0].begin();
+        //        {
+        //            leftEye.draw(0,0);
+        //        }
+        //        blurs[0].end();
+        //        glPushMatrix();
+        //        glTranslatef(leftEye.rect.x,leftEye.rect.y,0);
+        //        {
+        //            alphaMaskShader.begin();
+        //            alphaMaskShader.setUniformTexture("maskTex", leftEye.mask, 1 );
+        //            
+        //
+        //            blurs[0].draw(0,0,leftEye.rect.width,leftEye.rect.height);
+        //            
+        //            alphaMaskShader.end();
+        //        }
+        //        glPopMatrix();
         
-        blurNose.begin();
-        {
-            noseBuffer.draw(0,0);//,noseRect.width,noseRect.height);
-        }
-        blurNose.end();
-        glPushMatrix();
-        glTranslatef(noseRect.x,noseRect.y,0);
-        {
-            alphaMaskShader.begin();
-            alphaMaskShader.setUniformTexture("maskTex", noseMask, 1 );
-            blurNose.draw(0,0,noseRect.width,noseRect.height);
-            alphaMaskShader.end();
-        }
-        glPopMatrix();
         
-        blurMouth.begin();
-        {
-            mouthBuffer.draw(0,0);//,mouthRect.width,mouthRect.height);
-        }
-        blurMouth.end();
-        glPushMatrix();
-        glTranslatef(mouthRect.x,mouthRect.y,0);
-        {
-            alphaMaskShader.begin();
-            alphaMaskShader.setUniformTexture("maskTex", mouthMask, 1 );
-            blurMouth.draw(0,0,mouthRect.width,mouthRect.height);
-            alphaMaskShader.end();
-        }
-        glPopMatrix();
         ofPopMatrix();
         
         
     }
     ofPushMatrix();
     ofTranslate(camW,0);
-    faceBuffer.draw(0,0);
+    {
+        faceBuffer.draw(0,0);
+        
+        
+        ofPushMatrix();
+        ofTranslate(0,camH*0.5f);
+        leftEye.drawEffect(alphaMaskShader);
+        rightEye.drawEffect(alphaMaskShader);
+        nose.drawEffect(alphaMaskShader);
+        mouth.drawEffect(alphaMaskShader);
+        
+        ofPopMatrix();
     
     
-    ofPushMatrix();
-    ofTranslate(0,camH*0.5f);
-    drawLeftEye();
-    drawRightEye(); 
-    drawNose(); 
-    drawMouth();
+
     
-    ofPopMatrix();
+        ofPushStyle();
+        ofNoFill();
+        ofSetColor(ofColor::yellow);
+        leftEye.drawRect();
+        
+        ofSetColor(ofColor::cyan);
+        rightEye.drawRect();
+        ofSetColor(ofColor::blue);
+        nose.drawRect();
+        ofSetColor(ofColor::gray);
+        mouth.drawRect();
+        ofPopStyle();
+        
+        
     
-    ofPushStyle();
-    ofNoFill();
-    ofSetColor(ofColor::yellow);
-    ofRect(eyeROIL);
-    ofSetColor(ofColor::cyan);
-    ofRect(eyeROIR);
-    ofSetColor(ofColor::blue);
-    ofRect(noseROI);
-    ofSetColor(ofColor::gray);
-    ofRect(mouthROI);
-    ofPopStyle();
-    
-    
-    ofPushStyle();
-    ofNoFill();
-    ofSetColor(ofColor::green);
-    
-    for(int i = 0; i < leftEyefinder.blobs.size(); i++) {
-        ofRectangle cur = leftEyefinder.blobs[i].boundingRect;
-        ofRect(cur.x, cur.y, cur.width, cur.height);
-        ofDrawBitmapString("left eye",cur.x, cur.y);
     }
-    ofPopStyle();
-    ofPushStyle();
-    ofNoFill();
-    ofSetColor(ofColor::blue);
-    for(int i = 0; i < rightEyefinder.blobs.size(); i++) {
-        ofRectangle cur = rightEyefinder.blobs[i].boundingRect;
-        ofRect(cur.x, cur.y, cur.width, cur.height);
-        ofDrawBitmapString("right eye",cur.x, cur.y);
-    }
-    ofPopStyle();
-    ofPushStyle();
-    ofNoFill();
-    ofSetColor(ofColor::white);
-    for(int i = 0; i < mouthfinder.blobs.size(); i++) {
-        ofRectangle cur = mouthfinder.blobs[i].boundingRect;
-        ofRect(cur.x, cur.y, cur.width, cur.height);
-        ofDrawBitmapString("mouth",cur.x, cur.y);
-    }
-    ofPopStyle();
-    ofPushStyle();
-    ofNoFill();
-    ofSetColor(ofColor::black);
-    for(int i = 0; i < nosefinder.blobs.size(); i++) {
-        ofRectangle cur = nosefinder.blobs[i].boundingRect;
-        ofRect(cur.x, cur.y, cur.width, cur.height);
-        ofDrawBitmapString("nose",cur.x, cur.y);
-    }
-    ofPopStyle();
     ofPopMatrix();
     ofPushStyle();
     ofSetColor(ofColor::black);
@@ -547,35 +333,7 @@ void testApp::draw(){
     ofPopStyle();
     gui.draw();
 }
-void testApp::drawLeftEye()
-{
-    alphaMaskShader.begin();
-    alphaMaskShader.setUniformTexture("maskTex", leftEyeMask, 1 );
-    lefteyeBuffer.draw(leftEyeRect.x,leftEyeRect.y,leftEyeRect.width,leftEyeRect.height);
-    alphaMaskShader.end();
-}
-void testApp::drawRightEye()
-{
-    alphaMaskShader.begin();
-    alphaMaskShader.setUniformTexture("maskTex", rightEyeMask, 1 );
-    righteyeBuffer.draw(rightEyeRect.x,rightEyeRect.y,rightEyeRect.width,rightEyeRect.height);
-    alphaMaskShader.end();
-    
-}
-void testApp::drawNose()
-{    
-    alphaMaskShader.begin();
-    alphaMaskShader.setUniformTexture("maskTex", noseMask, 1 );
-    noseBuffer.draw(noseRect.x,noseRect.y,noseRect.width,noseRect.height);
-    alphaMaskShader.end();
-}
-void testApp::drawMouth()
-{   
-    alphaMaskShader.begin();
-    alphaMaskShader.setUniformTexture("maskTex", mouthMask, 1 );
-    mouthBuffer.draw(mouthRect.x,mouthRect.y,mouthRect.width,mouthRect.height);
-    alphaMaskShader.end();
-}
+
 void testApp::exit() {
 	kinect.setCameraTiltAngle(0); // zero the tilt on exit
 	kinect.close();
@@ -585,12 +343,6 @@ void testApp::exit() {
 void testApp::keyPressed(int key){
     switch(key)
     {
-        case '=':
-            minArea++;
-            break;
-        case '-':
-            minArea--;
-            break;
     }
 }
 
