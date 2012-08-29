@@ -1,0 +1,23 @@
+<DATA>
+    <PREFIX>a</PREFIX>
+    <BACKGROUND>background.png</BACKGROUND>
+    <OVERLAY>overlay.png</OVERLAY>
+    <POINTS>
+        <POINT>
+            <X>0</X>
+            <Y>0</Y>
+        </POINT>
+        <POINT>
+            <X>640</X>
+            <Y>0</Y>
+        </POINT>
+        <POINT>
+            <X>640</X>
+            <Y>480</Y>
+        </POINT>
+        <POINT>
+            <X>0</X>
+            <Y>480</Y>
+        </POINT>
+    </POINTS>
+</DATA>

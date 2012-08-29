@@ -8,34 +8,31 @@
 
 #ifndef FaceFeatureDetect_MyBox2D_h
 #define FaceFeatureDetect_MyBox2D_h
-#include "ofxBox2d.h"
 #include "FaceTracking.h"
+#include "ofxBox2d.h"
+struct DataSet
+{
+    FaceFeature * feature;
+    ofShader *shader;
+};
 // A Custom Particle extedning the box2d circle
 class CustomParticle : public ofxBox2dCircle {
 	
 public:
 	
-	void setupTheCustomData(FaceFeature * feature) {
-		
-//		static int colors[] = {0xcae72b, 0xe63b8f, 0x2bb0e7};
-//		static string abc   = "abcdefghijklmnopqrstuvwxyz";
-		
-		// we are using a Data pointer because 
-		// box2d needs to have a pointer not 
-		// a referance
-		setData(feature);
-//		Data * theData = (Data*)getData();
-//		
-//		theData->id = ofRandom(0, 100);
-//		theData->name += abc[(int)ofRandom(0, abc.size())];
-//		theData->color.setHex(colors[(int)ofRandom(0, 3)]);
+	void setupTheCustomData(FaceFeature * feature , ofShader *shader) {
         
+		setData(new DataSet);
+        DataSet* theData = (DataSet*)getData();
+        theData->feature = feature;
+        theData->shader = shader;
 		printf("setting the custom data!\n");
 		
 	}
 	
 	void draw() {
-		FaceFeature* theData = (FaceFeature*)getData();
+		DataSet* theData = (DataSet*)getData();
+        FaceFeature * feature = theData->feature;
 		if(theData) {
 			
 			// Evan though we know the data object lets just 
@@ -52,6 +49,7 @@ public:
 			ofCircle(0, 0, radius);	
 			
 			ofSetColor(255);
+            feature->drawEffect(*theData->shader);
 			//ofDrawBitmapString(theData->name, -5, 5);
 			ofPopMatrix();
 		}
@@ -66,7 +64,9 @@ public:
     void update();
     void draw();
     void exit();
+    void addParticle(CustomParticle &p);
     ofxBox2d box2d;
+    vector <CustomParticle>		particles;
 };
 
 

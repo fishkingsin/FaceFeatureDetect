@@ -162,8 +162,8 @@ public:
             alpha.setUniformTexture("maskTex", mask, 1 );
             
             glPushMatrix();
-            glTranslatef(rect.x,rect.y,0);
-            glScalef(scale,scale,1);
+            //glTranslatef(rect.x,rect.y,0);
+            //glScalef(scale,scale,1);
             {
                 draw(0,0,rect.width,rect.height);
             }

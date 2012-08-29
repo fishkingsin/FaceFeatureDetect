@@ -4,7 +4,7 @@
 #include "FaceTracking.h"
 #include "MyBox2D.h"
 #include "ofxXmlSettings.h"
-#include "FaceMapper.h"
+//#include "FaceMapper.h"
 class testApp : public ofBaseApp{
 public:
     void setup();

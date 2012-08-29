@@ -78,8 +78,8 @@ void testApp::draw(){
         while(!lastFileNames.empty())
         {
             string file_name = lastFileNames.back();
-            FaceData faceData;
-            faceData.setup(file_name,"settings01.xml");
+//            FaceData faceData;
+//            faceData.setup(file_name,"settings01.xml");
             //TO_DO load image and map the face on shoes;
             lastFileNames.pop_back();
         }
@@ -125,7 +125,11 @@ void testApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
-    
+//    CustomParticle p;
+//	p.setPhysics(1.0, 0.5, 0.3);
+//	p.setup(box2d.box2d.getWorld(), x, y, ofRandom(20, 60));
+//	p.setupTheCustomData(&faceTracking.leftEye,&faceTracking.alphaMaskShader);
+//    box2d.addParticle( p);
 }
 
 //--------------------------------------------------------------

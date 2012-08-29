@@ -21,9 +21,15 @@ void MyBox2D::update()
 }
 void MyBox2D::draw()
 {
-    
+    for(int i=0; i<particles.size(); i++) {
+		particles[i].draw();
+	}   
 }
 void MyBox2D::exit()
 {
     
+}
+void MyBox2D::addParticle(CustomParticle &p) {
+	
+	particles.push_back(p);
 }
