@@ -1,15 +1,15 @@
 <controls>
     <SliderInt_minFeatureArea>
         <name>minFeatureArea</name>
-        <value>49</value>
+        <value>50</value>
     </SliderInt_minFeatureArea>
     <SliderFloat_eyeROIL_X>
         <name>eyeROIL_X</name>
-        <value>57.1</value>
+        <value>1</value>
     </SliderFloat_eyeROIL_X>
     <SliderFloat_eyeROIL_W>
         <name>eyeROIL_W</name>
-        <value>142.525</value>
+        <value>256</value>
     </SliderFloat_eyeROIL_W>
     <SliderFloat_eyeROIL_Y>
         <name>eyeROIL_Y</name>

@@ -73,6 +73,8 @@
 		1B21B25B15EDDA6D00DC1D8A /* ofxBox2dJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B21AF2715EDDA6B00DC1D8A /* ofxBox2dJoint.cpp */; };
 		1B21B25C15EDDA6D00DC1D8A /* ofxBox2dPolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B21AF2915EDDA6B00DC1D8A /* ofxBox2dPolygon.cpp */; };
 		1B21B25D15EDDA6D00DC1D8A /* ofxBox2dRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B21AF2C15EDDA6B00DC1D8A /* ofxBox2dRect.cpp */; };
+		1B21B49E15EDDEFA00DC1D8A /* FaceTracking.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B21B49D15EDDEFA00DC1D8A /* FaceTracking.cpp */; };
+		1B21B4A015EDE00700DC1D8A /* MyBox2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B21B49F15EDE00700DC1D8A /* MyBox2D.cpp */; };
 		1d5f3298c2fa073628012944b1efde88 /* ofxCvContourFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = c76de5c29bdbd2caa1dd0021a7376220 /* ofxCvContourFinder.cpp */; };
 		250a95ba26587be85db0a353e6e1dea2 /* ofxCvColorImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ce9c7160245b19131dae61282ee6cb53 /* ofxCvColorImage.cpp */; };
 		28090deb5109115003e8f1c540f04092 /* UdpSocketWin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5928aa323f5c2690b06c837d8d036f55 /* UdpSocketWin.cpp */; };
@@ -342,6 +344,10 @@
 		1B21AF2F15EDDA6B00DC1D8A /* ofxBox2dUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxBox2dUtils.h; sourceTree = "<group>"; };
 		1B21B17615EDDA6B00DC1D8A /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		1B21B17715EDDA6B00DC1D8A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		1B21B49B15EDDE6500DC1D8A /* FaceTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceTracking.h; sourceTree = "<group>"; };
+		1B21B49C15EDDE6500DC1D8A /* MyBox2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyBox2D.h; sourceTree = "<group>"; };
+		1B21B49D15EDDEFA00DC1D8A /* FaceTracking.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FaceTracking.cpp; sourceTree = "<group>"; };
+		1B21B49F15EDE00700DC1D8A /* MyBox2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyBox2D.cpp; sourceTree = "<group>"; };
 		1aa18353f9701b01731dfadf228466c5 /* poppack1.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = poppack1.h; path = ../../../addons/ofxAssimpModelLoader/libs/assimp/include/Compiler/poppack1.h; sourceTree = SOURCE_ROOT; };
 		1b2b8dd25ba5cc157bedbcf0a4512832 /* aiColor4D.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = aiColor4D.h; path = ../../../addons/ofxAssimpModelLoader/libs/assimp/include/aiColor4D.h; sourceTree = SOURCE_ROOT; };
 		1c085e327dab912cfa2a443d084c3628 /* ofxTCPServer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxTCPServer.cpp; path = ../../../addons/ofxNetwork/src/ofxTCPServer.cpp; sourceTree = SOURCE_ROOT; };
@@ -1652,6 +1658,10 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				1B21B49B15EDDE6500DC1D8A /* FaceTracking.h */,
+				1B21B49D15EDDEFA00DC1D8A /* FaceTracking.cpp */,
+				1B21B49C15EDDE6500DC1D8A /* MyBox2D.h */,
+				1B21B49F15EDE00700DC1D8A /* MyBox2D.cpp */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* testApp.h */,
@@ -2128,6 +2138,8 @@
 				1B21B25B15EDDA6D00DC1D8A /* ofxBox2dJoint.cpp in Sources */,
 				1B21B25C15EDDA6D00DC1D8A /* ofxBox2dPolygon.cpp in Sources */,
 				1B21B25D15EDDA6D00DC1D8A /* ofxBox2dRect.cpp in Sources */,
+				1B21B49E15EDDEFA00DC1D8A /* FaceTracking.cpp in Sources */,
+				1B21B4A015EDE00700DC1D8A /* MyBox2D.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
