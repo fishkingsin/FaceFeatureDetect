@@ -213,6 +213,11 @@ void FaceTracking::update()
         
     }
 }
+void FaceTracking::savingFace(string fn)
+{
+
+    ofSaveImage(facePixels, fn);
+}
 void FaceTracking::draw()
 {
     ofSetColor(ofColor::white);
@@ -231,28 +236,8 @@ void FaceTracking::draw()
         ofPushMatrix();
         ofTranslate(faceRect.x, faceRect.y);
         ofScale(faceRect.width/BUFFER_SIZE*1.0f, faceRect.height/BUFFER_SIZE*1.0f);
-        leftEye.drawEffect(alphaMaskShader,&blurs[0]);
-        rightEye.drawEffect(alphaMaskShader,&blurs[1]);
-        nose.drawEffect(alphaMaskShader,&blurs[2]);
-        mouth.drawEffect(alphaMaskShader,&blurs[3]);
-        
-        //        blurs[0].begin();
-        //        {
-        //            leftEye.draw(0,0);
-        //        }
-        //        blurs[0].end();
-        //        glPushMatrix();
-        //        glTranslatef(leftEye.rect.x,leftEye.rect.y,0);
-        //        {
-        //            alphaMaskShader.begin();
-        //            alphaMaskShader.setUniformTexture("maskTex", leftEye.mask, 1 );
-        //            
-        //
-        //            blurs[0].draw(0,0,leftEye.rect.width,leftEye.rect.height);
-        //            
-        //            alphaMaskShader.end();
-        //        }
-        //        glPopMatrix();
+        drawFeaturesBlur();
+        drawFeatures();
         
         
         ofPopMatrix();
@@ -266,25 +251,11 @@ void FaceTracking::draw()
         
         ofPushMatrix();
         ofTranslate(0,camH*0.5f);
-        leftEye.drawEffect(alphaMaskShader);
-        rightEye.drawEffect(alphaMaskShader);
-        nose.drawEffect(alphaMaskShader);
-        mouth.drawEffect(alphaMaskShader);
+        drawFeatures();
         
         ofPopMatrix();
         
-        ofPushStyle();
-        ofNoFill();
-        ofSetColor(ofColor::yellow);
-        leftEye.drawRect();
-        
-        ofSetColor(ofColor::cyan);
-        rightEye.drawRect();
-        ofSetColor(ofColor::blue);
-        nose.drawRect();
-        ofSetColor(ofColor::gray);
-        mouth.drawRect();
-        ofPopStyle();
+        drawMarkers();
         
         
         
@@ -298,6 +269,53 @@ void FaceTracking::draw()
     else os << "no face detected"<<endl;
     os << "spacebar toggle gui" <<endl;
     ofDrawBitmapString(os.str(),10,ofGetHeight()-50);
+    ofPopStyle();
+}
+void FaceTracking::drawFeatures()
+{
+    leftEye.drawEffect(alphaMaskShader);
+    rightEye.drawEffect(alphaMaskShader);
+    nose.drawEffect(alphaMaskShader);
+    mouth.drawEffect(alphaMaskShader);
+}
+void FaceTracking::drawFeaturesBlur()
+{
+    leftEye.drawEffect(alphaMaskShader,&blurs[0]);
+    rightEye.drawEffect(alphaMaskShader,&blurs[1]);
+    nose.drawEffect(alphaMaskShader,&blurs[2]);
+    mouth.drawEffect(alphaMaskShader,&blurs[3]);
+    
+    //        blurs[0].begin();
+    //        {
+    //            leftEye.draw(0,0);
+    //        }
+    //        blurs[0].end();
+    //        glPushMatrix();
+    //        glTranslatef(leftEye.rect.x,leftEye.rect.y,0);
+    //        {
+    //            alphaMaskShader.begin();
+    //            alphaMaskShader.setUniformTexture("maskTex", leftEye.mask, 1 );
+    //            
+    //
+    //            blurs[0].draw(0,0,leftEye.rect.width,leftEye.rect.height);
+    //            
+    //            alphaMaskShader.end();
+    //        }
+    //        glPopMatrix();
+}
+void FaceTracking::drawMarkers()
+{
+    ofPushStyle();
+    ofNoFill();
+    ofSetColor(ofColor::yellow);
+    leftEye.drawRect();
+    
+    ofSetColor(ofColor::cyan);
+    rightEye.drawRect();
+    ofSetColor(ofColor::blue);
+    nose.drawRect();
+    ofSetColor(ofColor::gray);
+    mouth.drawRect();
     ofPopStyle();
 }
 void FaceTracking::processTracking(int x, int y , int w, int h , ofTexture &tex)

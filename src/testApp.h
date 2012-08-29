@@ -3,6 +3,8 @@
 #include "ofMain.h"
 #include "FaceTracking.h"
 #include "MyBox2D.h"
+#include "ofxXmlSettings.h"
+#include "FaceMapper.h"
 class testApp : public ofBaseApp{
 public:
     void setup();
@@ -23,4 +25,15 @@ public:
     
     MyBox2D box2d;
     FaceTracking faceTracking;
+    int counter,numDigi;
+    string path_to_save;
+    vector <string>lastFileNames;
+    ofxXmlSettings xml;
+    
+    ofImage loadedImage;
+    
+    bool bCapture;
+    
+    
+    
 };

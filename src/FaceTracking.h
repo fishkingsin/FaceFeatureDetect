@@ -14,9 +14,6 @@
 #include "ofxSimpleGuiToo.h"
 #include "ofxKinect.h"
 #include "ofxBlur.h"
-#ifdef USE_FACETRACKER
-#include "ofxFraceTracker.h"
-#endif
 
 #define camW 640
 #define camH 480
@@ -103,6 +100,18 @@ public:
             
             buffer.end();
         }
+        else
+        {
+                        
+            buffer.begin();	
+            ofClear(0, 0, 0, 0);
+            
+            tex.bind();
+            norm.draw();
+            tex.unbind();
+            
+            buffer.end();
+        }
         
     }
     void draw()
@@ -154,8 +163,9 @@ public:
             
             glPushMatrix();
             glTranslatef(rect.x,rect.y,0);
+            glScalef(scale,scale,1);
             {
-                draw(0,0);
+                draw(0,0,rect.width,rect.height);
             }
             glPopMatrix();
             alpha.end();
@@ -181,7 +191,10 @@ public:
     void draw();
     void exit();
     void processTracking(int x, int y , int w, int h , ofTexture& tex);
-    
+    void savingFace(string fn);
+    void drawFeatures();
+    void drawFeaturesBlur();
+    void drawMarkers();
     ofxKinect kinect;
     bool bKinect;
 	ofxCvGrayscaleImage grayThreshNear; // the near thresholded image
