@@ -90,6 +90,11 @@ void testApp::setup(){
 	gui.setDefaultKeys(true);
 	gui.addSlider("minFaceAreaW",minFaceAreaW,1,512);
 	gui.addSlider("minFaceAreaH",minFaceAreaH,1,512);
+    gui.addSlider("faceOffsetX",faceOffset.x,1,512);
+    gui.addSlider("faceOffsetY",faceOffset.y,1,512);
+    gui.addSlider("faceOffsetW",faceOffset.width,1,512);
+    gui.addSlider("faceOffsetH",faceOffset.height,1,512);
+    
     
     
     leftEye.setup("lefteye","haarcascade_mcs_lefteye.xml","leftEyeMask.png",64,48);
@@ -213,13 +218,17 @@ void testApp::processTracking(int x, int y , int w, int h , ofTexture &tex)
     if(facefinder.blobs.size()>0)
     {
         ofRectangle cur = facefinder.blobs[0].boundingRect;
-        faceRect = cur;
-        ofRect(cur.x, cur.y, cur.width, cur.height);
+        faceRect.x = cur.x+faceOffset.x;
+        faceRect.y = cur.y+faceOffset.y;
+        faceRect.width = cur.width+faceOffset.width;
+        faceRect.height = cur.height+faceOffset.height;
+
+//        ofRect(faceRect.x, faceRect.y, faceRect.width, faceRect.height);
         
-        normFace.setTexCoord(0,ofVec2f(cur.x, cur.y));
-        normFace.setTexCoord(1,ofVec2f(cur.x+cur.width, cur.y));
-        normFace.setTexCoord(2,ofVec2f(cur.x+cur.width, cur.y+cur.height));
-        normFace.setTexCoord(3,ofVec2f(cur.x, cur.y+cur.height));
+        normFace.setTexCoord(0,ofVec2f(faceRect.x, faceRect.y));
+        normFace.setTexCoord(1,ofVec2f(faceRect.x+faceRect.width, faceRect.y));
+        normFace.setTexCoord(2,ofVec2f(faceRect.x+faceRect.width, faceRect.y+faceRect.height));
+        normFace.setTexCoord(3,ofVec2f(faceRect.x, faceRect.y+faceRect.height));
         
         
         
@@ -258,7 +267,7 @@ void testApp::draw(){
         
         ofPushMatrix();
         ofTranslate(faceRect.x, faceRect.y);
-        ofScale(faceRect.width/BUFFER_SIZE, faceRect.height/BUFFER_SIZE);
+        ofScale(faceRect.width/BUFFER_SIZE*1.0f, faceRect.height/BUFFER_SIZE*1.0f);
         leftEye.drawEffect(alphaMaskShader,&blurs[0]);
         rightEye.drawEffect(alphaMaskShader,&blurs[1]);
         nose.drawEffect(alphaMaskShader,&blurs[2]);
@@ -292,7 +301,6 @@ void testApp::draw(){
     {
         faceBuffer.draw(0,0);
         
-        
         ofPushMatrix();
         ofTranslate(0,camH*0.5f);
         leftEye.drawEffect(alphaMaskShader);
@@ -301,9 +309,6 @@ void testApp::draw(){
         mouth.drawEffect(alphaMaskShader);
         
         ofPopMatrix();
-    
-    
-
     
         ofPushStyle();
         ofNoFill();

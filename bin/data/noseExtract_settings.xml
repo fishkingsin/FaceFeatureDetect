@@ -1,38 +1,38 @@
 <controls>
     <SliderInt_minFeatureArea>
         <name>minFeatureArea</name>
-        <value>39</value>
+        <value>30</value>
     </SliderInt_minFeatureArea>
     <SliderFloat_eyeROIL_X>
         <name>eyeROIL_X</name>
-        <value>1</value>
+        <value>80.05</value>
     </SliderFloat_eyeROIL_X>
     <SliderFloat_eyeROIL_W>
         <name>eyeROIL_W</name>
-        <value>256</value>
+        <value>90.25</value>
     </SliderFloat_eyeROIL_W>
     <SliderFloat_eyeROIL_Y>
         <name>eyeROIL_Y</name>
-        <value>92.8</value>
+        <value>102.745</value>
     </SliderFloat_eyeROIL_Y>
     <SliderFloat_eyeROIL_H>
         <name>eyeROIL_H</name>
-        <value>81.325</value>
+        <value>77.5</value>
     </SliderFloat_eyeROIL_H>
     <SliderFloat_offset.x>
         <name>offset.x</name>
-        <value>-2.56</value>
+        <value>-6.656</value>
     </SliderFloat_offset.x>
     <SliderFloat_offset.y>
         <name>offset.y</name>
-        <value>-17.92</value>
+        <value>-27.648</value>
     </SliderFloat_offset.y>
     <SliderFloat_offset.width>
         <name>offset.width</name>
-        <value>5.12</value>
+        <value>8.704</value>
     </SliderFloat_offset.width>
     <SliderFloat_offset.height>
         <name>offset.height</name>
-        <value>38.4</value>
+        <value>35.84</value>
     </SliderFloat_offset.height>
 </controls>

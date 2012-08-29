@@ -116,7 +116,7 @@ public:
         ofRect(rect.x, rect.y, rect.width, rect.height);
         ofDrawBitmapString(name,rect.x, rect.y);
     }
-    void drawEffect(ofShader &alpha,ofxBlur *blur = NULL)
+    void drawEffect(ofShader &alpha,ofxBlur *blur = NULL , float scale = 1.0f)
     {
         if(blur!=NULL)
         {
@@ -127,6 +127,7 @@ public:
             blur->end();
             glPushMatrix();
             glTranslatef(rect.x,rect.y,0);
+            glScalef(scale,scale,1);
             {
                 alpha.begin();
                 alpha.setUniformTexture("maskTex", mask, 1 );
@@ -146,7 +147,7 @@ public:
             glPushMatrix();
             glTranslatef(rect.x,rect.y,0);
             {
-            draw(0,0);
+                draw(0,0);
             }
             glPopMatrix();
             alpha.end();
@@ -154,18 +155,11 @@ public:
     }
     string name;
     ofxCvHaarFinder finder;
-    
     ofFbo buffer;
-    
-    
-    ofMesh norm;
-    
+    ofMesh norm;    
     ofFbo mask;
-    
     ofRectangle rect;
-    
     ofRectangle offset;
-    
     ofRectangle	ROI;
     
     int minArea;
@@ -211,7 +205,7 @@ public:
     ofVideoPlayer 		vidPlayer;
 #endif
     ofxCvHaarFinder facefinder;
-    
+    ofRectangle       faceOffset;
     
     ofFbo faceBuffer;
     ofMesh normFace;

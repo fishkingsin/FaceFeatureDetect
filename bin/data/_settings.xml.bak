@@ -1,10 +1,26 @@
 <controls>
     <SliderInt_minFaceAreaW>
         <name>minFaceAreaW</name>
-        <value>110</value>
+        <value>149</value>
     </SliderInt_minFaceAreaW>
     <SliderInt_minFaceAreaH>
         <name>minFaceAreaH</name>
-        <value>92</value>
+        <value>118</value>
     </SliderInt_minFaceAreaH>
+    <SliderFloat_faceOffsetX>
+        <name>faceOffsetX</name>
+        <value>1</value>
+    </SliderFloat_faceOffsetX>
+    <SliderFloat_faceOffsetY>
+        <name>faceOffsetY</name>
+        <value>1</value>
+    </SliderFloat_faceOffsetY>
+    <SliderFloat_faceOffsetW>
+        <name>faceOffsetW</name>
+        <value>1</value>
+    </SliderFloat_faceOffsetW>
+    <SliderFloat_faceOffsetH>
+        <name>faceOffsetH</name>
+        <value>52.1</value>
+    </SliderFloat_faceOffsetH>
 </controls>
