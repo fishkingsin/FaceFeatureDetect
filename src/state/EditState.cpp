@@ -25,18 +25,23 @@ void EditState::setup(){
     ofDirectory dir;
     dir.allowExt("xml");
     int numTag = dir.listDir("face_profile");
-    file = new string[numTag];
+    //file = new string[numTag];
     for(int i = 0 ;i < numTag ; i++)
     {
-        file[i] = dir.getPath(i);
+        file.push_back(dir.getPath(i));
     }
     prevSelection = -1;
     currSelection = 0;
-    //gui.addComboBox("FaceProfile" , currSelection, numTag,file);
+    getSharedData().panel.setWhichPanel("FaceMapEdit");
+    getSharedData().panel.setWhichColumn(0);
+    getSharedData().panel.addTextDropDown("FaceProfile","FaceProfile", currSelection, file);
+    getSharedData().panel.addToggle("DrawWapper","DrawWapper",false);
+    getSharedData().panel.addToggle("SaveWarpper","SaveWapper",false);
 }
 
 //--------------------------------------------------------------
 void EditState::update(){
+    currSelection =  getSharedData().panel.getValueI("FaceProfile");
     if(currSelection!=prevSelection)
     {
         prevSelection  = currSelection;

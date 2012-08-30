@@ -171,15 +171,15 @@ void FaceTracking::draw()
         
     }
     ofPopMatrix();
-    ofPushStyle();
-    ofSetColor(ofColor::black);
-    ostringstream os;
-    os <<"minArea : "+ofToString(minArea) <<endl ;
-    if(facefinder.blobs.size()>0) os << "face detect OK"<<endl;
-    else os << "no face detected"<<endl;
-    os << "spacebar toggle gui" <<endl;
-    ofDrawBitmapString(os.str(),10,ofGetHeight()-50);
-    ofPopStyle();
+//    ofPushStyle();
+//    ofSetColor(ofColor::black);
+//    ostringstream os;
+//    os <<"minArea : "+ofToString(minArea) <<endl ;
+//    if(facefinder.blobs.size()>0) os << "face detect OK"<<endl;
+//    else os << "no face detected"<<endl;
+//    os << "spacebar toggle gui" <<endl;
+//    ofDrawBitmapString(os.str(),10,ofGetHeight()-50);
+//    ofPopStyle();
 }
 void FaceTracking::drawFeatures()
 {
@@ -231,7 +231,7 @@ void FaceTracking::drawMarkers()
 void FaceTracking::processTracking(int x, int y , int w, int h , ofTexture &tex)
 {
     facefinder.findHaarObjects(grayImage,x,y,w,h,minFaceAreaW,minFaceAreaH);
-    if(facefinder.blobs.size()>0)
+    if(facefinder.blobs.size()>numPlayer)
     {
         ofRectangle cur = facefinder.blobs[0].boundingRect;
         faceRect.x = cur.x+faceOffset.x;

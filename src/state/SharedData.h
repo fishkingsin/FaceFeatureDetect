@@ -35,6 +35,7 @@
 #include "ofxXmlSettings.h"
 #include "FaceMapper.h"
 #include "ofxAutoControlPanel.h"
+
 class SharedData
 {
 public:
@@ -44,4 +45,10 @@ public:
     ofxXmlSettings xml;
 	ofImage loadedImage;
     ofxAutoControlPanel panel;
+    enum NUM_PALYER
+    {
+        ONE,TWO
+    };
+    NUM_PALYER numPlayer;
+    
 };

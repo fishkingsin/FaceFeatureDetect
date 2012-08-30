@@ -26,6 +26,7 @@ public:
     
     
 private:
+    float appFrameRate;
     itg::ofxStateMachine<SharedData> stateMachine;    
     
 };

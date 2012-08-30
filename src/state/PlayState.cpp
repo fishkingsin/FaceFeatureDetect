@@ -76,6 +76,7 @@ void PlayState::update(){
         feature[i]->offset.height = getSharedData().panel.getValueF(feature[i]->name+"offset.height");
     
     }
+    faceTracking.numPlayer = getSharedData().numPlayer;
 	faceTracking.update();
     box2d.update();
 }
@@ -114,10 +115,15 @@ void PlayState::draw(){
             string file_name = getSharedData().lastFileNames.back();
             FaceData faceData;
             faceData.setup(file_name,"face_profile/settings_a.xml");
+            faceData.save();
             faceData.setup(file_name,"face_profile/settings_b.xml");
+            faceData.save();
             faceData.setup(file_name,"face_profile/settings_c.xml");
+            faceData.save();
             faceData.setup(file_name,"face_profile/settings_d.xml");
+            faceData.save();
             faceData.setup(file_name,"face_profile/settings_e.xml");
+            faceData.save();
             //TO_DO load image and map the face on shoes;
             getSharedData().lastFileNames.pop_back();
         }

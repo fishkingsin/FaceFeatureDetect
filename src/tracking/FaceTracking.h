@@ -225,6 +225,7 @@ public:
     int minArea ,
      minFaceAreaW ,
      minFaceAreaH ;
+    int numPlayer;
 };
 
 

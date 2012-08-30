@@ -47,7 +47,11 @@ void testApp::setup(){
 	stateMachine.getSharedData().panel.addPanel("FaceMapEdit", 4, false);
     
 	ofxControlPanel::setBackgroundColor(simpleColor(30, 30, 30, 100));	
-    
+    //some dummy vars we will update to show the variable lister object
+	appFrameRate	= ofGetFrameRate();
+    stateMachine.getSharedData().panel.setWhichPanel("General");
+    stateMachine.getSharedData().panel.setWhichColumn(0);
+	stateMachine.getSharedData().panel.addChartPlotter("some chart", guiStatVarPointer("app fps", &appFrameRate, GUI_VAR_FLOAT, true, 2), 200, 50, 200, 5, 80);
 
 	
 	// initialise state machine
@@ -56,12 +60,14 @@ void testApp::setup(){
 	stateMachine.changeState("PlayState");
     stateMachine.getSharedData().panel.loadSettings("settings.xml");
     stateMachine.getSharedData().panel.hide();
+    stateMachine.getSharedData().numPlayer = SharedData::TWO;
     
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-    
+	appFrameRate	= ofGetFrameRate();
+	
 }
 
 //--------------------------------------------------------------

@@ -53,5 +53,5 @@ public:
 	string getName();
     FaceData faceData;
     int currSelection,prevSelection;
-    string *file;
+    vector<string >file;
 };

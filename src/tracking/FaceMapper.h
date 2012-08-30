@@ -18,8 +18,7 @@ public:
     ofImage backgroundImage;
     ofImage overlayImage;
     ofImage faceImage;
-    ofPoint tPt[4];
-    ofPoint vPt[4];
+
     string imageFile;
     string prefix;
     ofxGLWarper warpper;
@@ -45,19 +44,7 @@ public:
                 xml.setValue("PREFIX","a");
                 xml.setValue("BACKGROUND","background.png");
                 xml.setValue("OVERLAY","overlay.png");
-                xml.addTag("POINTS");
-                if(xml.pushTag("POINTS"))
-                {
-                    
-                    for(int i = 0; i < 4 ; i++)
-                    {
-                        xml.setValue("POINT:X",0.0f,i);
-                        xml.setValue("POINT:Y",0.0f,i);
-                        
-                    }
-                    xml.popTag();
-                }
-                xml.popTag();
+                
             }
             xml.saveFile(setting_fn);
         }
@@ -71,22 +58,6 @@ public:
                 overlayImage.loadImage(xml.getValue("OVERLAY","overlay.png"));
                 warpper.setup(0,0,faceImage.width,faceImage.height);
                 warpper.load("warpper_"+prefix+".xml");
-                if(xml.pushTag("POINTS"))
-                {
-                    int numTag = xml.getNumTags("POINT");
-                    for(int i = 0; i < numTag ; i++)
-                    {
-                        float x = xml.getValue("POINT:X",0.0f,i);
-                        float y = xml.getValue("POINT:Y",0.0f,i);
-                        vPt[i] = ofVec2f(x,y);
-                        ofLog(OF_LOG_VERBOSE,"tpt %i x:%f y:%f" ,i,x,y );
-                    }
-                    xml.popTag();
-                }
-                tPt[0] = ofVec2f(0,0);
-                tPt[1] = ofVec2f(faceImage.getWidth(),0);
-                tPt[2] = ofVec2f(faceImage.getWidth(),faceImage.getHeight());
-                tPt[3] = ofVec2f(0,faceImage.getHeight());
 
                 xml.popTag();
             }
@@ -98,21 +69,6 @@ public:
     {
         ofEnableAlphaBlending();
         backgroundImage.draw(0,0);
-//        faceImage.getTextureReference().bind();
-//        glBegin(GL_QUADS);
-//        
-//        
-//        glTexCoord2f(tPt[0].x, tPt[0].y);
-//        glVertex2f(vPt[0].x, vPt[0].y);
-//        glTexCoord2f(tPt[1].x, tPt[1].y);
-//        glVertex2f(vPt[1].x, vPt[1].y);
-//        glTexCoord2f(tPt[2].x, tPt[2].y);
-//        glVertex2f(vPt[2].x, vPt[2].y);
-//        glTexCoord2f(tPt[3].x, tPt[3].y);
-//        glVertex2f(vPt[3].x, vPt[3].y);
-//                
-//        glEnd();
-//        faceImage.getTextureReference().unbind();
         warpper.begin();
         faceImage.draw(0,0);
         warpper.end();
@@ -141,7 +97,41 @@ public:
         warpper.save("warpper_"+prefix+".xml");
     }
 };
-
+class DoubleFaceData : public FaceData
+{
+public:
+    ofxGLWarper warpper2;
+    ofImage faceImage2;
+    void setup(string img_fn,string img_fn2, string setting_fn)
+    {
+        faceImage2.clear();
+        FaceData::setup(img_fn, setting_fn);
+        faceImage2.loadImage(img_fn2);
+        warpper2.load("warpper2_"+prefix+".xml");
+    }
+    void draw()
+    {
+        ofEnableAlphaBlending();
+        backgroundImage.draw(0,0);
+        warpper.begin();
+        faceImage.draw(0,0);
+        warpper.end();
+        warpper.draw();
+        
+        warpper2.begin();
+        faceImage2.draw(0,0);
+        warpper2.end();
+        warpper2.draw();
+        
+        overlayImage.draw(0,0);
+        
+    }
+    void saveSetting()
+    {
+        FaceData::saveSetting();
+        warpper.save("warpper2_"+prefix+".xml");
+    }
+};
 class FaceMapper
 {
 public:
