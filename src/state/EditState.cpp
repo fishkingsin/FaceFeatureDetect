@@ -31,7 +31,8 @@ void EditState::setup(){
         file[i] = dir.getPath(i);
     }
     prevSelection = -1;
-    gui.addComboBox("FaceProfile" , currSelection, numTag,file);
+    currSelection = 0;
+    //gui.addComboBox("FaceProfile" , currSelection, numTag,file);
 }
 
 //--------------------------------------------------------------

@@ -34,14 +34,29 @@ void testApp::setup(){
         }
     }
 //    // setup shared data
-//	stateMachine.getSharedData().counter = 0;
-//	stateMachine.getSharedData().lastUpdate = ofGetElapsedTimeMillis();
-//	stateMachine.getSharedData().font.loadFont("vag.ttf", 50);
+    ofxControlPanel::setBackgroundColor(simpleColor(30, 30, 60, 100));
+	ofxControlPanel::setTextColor(simpleColor(240, 50, 50, 255));
+    stateMachine.getSharedData().panel.setup(ofGetWidth(),ofGetHeight());
+	stateMachine.getSharedData().panel.loadFont("MONACO.TTF", 8);		
+	stateMachine.getSharedData().panel.addPanel("General", 4,false);
+    
+	ofxControlPanel::setBackgroundColor(simpleColor(60, 30, 30, 100));	
+	stateMachine.getSharedData().panel.addPanel("FaceTracking", 5, false);
+    
+	ofxControlPanel::setBackgroundColor(simpleColor(70, 70, 30, 100));	
+	stateMachine.getSharedData().panel.addPanel("FaceMapEdit", 4, false);
+    
+	ofxControlPanel::setBackgroundColor(simpleColor(30, 30, 30, 100));	
+    
+
 	
 	// initialise state machine
 	stateMachine.addState(new PlayState());
 	stateMachine.addState(new EditState());
 	stateMachine.changeState("PlayState");
+    stateMachine.getSharedData().panel.loadSettings("settings.xml");
+    stateMachine.getSharedData().panel.hide();
+    
 }
 
 //--------------------------------------------------------------
@@ -51,7 +66,7 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    gui.draw();
+    
 
 }
 void testApp::exit()
@@ -66,7 +81,18 @@ void testApp::exit()
 }
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-    
+    switch(key)
+    {
+        case OF_KEY_F1:
+            stateMachine.changeState("PlayState");
+            break;
+        case OF_KEY_F2:
+            stateMachine.changeState("EditState");
+            break;
+            case 's':
+            stateMachine.getSharedData().panel.saveSettings();
+            break;
+    }
 }
 
 //--------------------------------------------------------------

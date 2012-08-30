@@ -34,6 +34,7 @@
 #include "MyBox2D.h"
 #include "ofxXmlSettings.h"
 #include "FaceMapper.h"
+#include "ofxAutoControlPanel.h"
 class SharedData
 {
 public:
@@ -42,4 +43,5 @@ public:
     vector <string>lastFileNames;
     ofxXmlSettings xml;
 	ofImage loadedImage;
+    ofxAutoControlPanel panel;
 };

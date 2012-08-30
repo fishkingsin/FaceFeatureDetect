@@ -16,7 +16,7 @@
 #include "ofxQTKitVideoGrabber.h"
 #endif
 // otherwise, we'll use a movie file
-#include "ofxSimpleGuiToo.h"
+//#include "ofxSimpleGuiToo.h"
 
 #include "ofxBlur.h"
 
@@ -52,20 +52,7 @@ public:
         
         
         name = feature_name;
-        gui.addPage(feature_name+"Extract");
-        gui.addSlider("minFeatureArea",minArea,1,BUFFER_SIZE);
-        
-        gui.addSlider("eyeROIL_X",ROI.x,1,BUFFER_SIZE);
-        gui.addSlider("eyeROIL_W",ROI.width,1,BUFFER_SIZE);
-        gui.addSlider("eyeROIL_Y",ROI.y,1,BUFFER_SIZE);
-        gui.addSlider("eyeROIL_H",ROI.height,1,BUFFER_SIZE);
-        
-        //gui.addPage("OffSet");
-        gui.addSlider( "offset.x",offset.x,-BUFFER_SIZE,BUFFER_SIZE);
-        gui.addSlider( "offset.y",offset.y,-BUFFER_SIZE,BUFFER_SIZE);
-        gui.addSlider( "offset.width",offset.width,-BUFFER_SIZE,BUFFER_SIZE);
-        gui.addSlider( "offset.height",offset.height,-BUFFER_SIZE,BUFFER_SIZE);
-        
+                
         ofEnableArbTex();
         ofImage maskImage;
         
@@ -234,6 +221,10 @@ public:
     ofxBlur blurs[4];
     
     ofShader alphaMaskShader;
+    
+    int minArea ,
+     minFaceAreaW ,
+     minFaceAreaH ;
 };
 
 

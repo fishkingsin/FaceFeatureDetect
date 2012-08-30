@@ -7,9 +7,7 @@
 //
 
 #include "FaceTracking.h"
-static int minArea =  50;
-static int minFaceAreaW =  50;
-static int minFaceAreaH =  50;
+
 void FaceTracking::setup()
 {
 #ifdef _USE_LIVE_VIDEO
@@ -65,13 +63,8 @@ void FaceTracking::setup()
 	normFace.addTexCoord(0);
 	normFace.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
     
-	gui.setDefaultKeys(true);
-	gui.addSlider("minFaceAreaW",minFaceAreaW,1,512);
-	gui.addSlider("minFaceAreaH",minFaceAreaH,1,512);
-    gui.addSlider("faceOffsetX",faceOffset.x,1,512);
-    gui.addSlider("faceOffsetY",faceOffset.y,1,512);
-    gui.addSlider("faceOffsetW",faceOffset.width,1,512);
-    gui.addSlider("faceOffsetH",faceOffset.height,1,512);
+	
+	
     
     
     
@@ -80,8 +73,7 @@ void FaceTracking::setup()
     nose.setup("nose","haarcascade_mcs_nose.xml","noseMask.png",48,64);
     mouth.setup("mouth","haarcascade_mcs_mouth.xml","mouthMask.png",64,48);
     
-    
-    gui.loadFromXML();
+   
     
     // There are 3 of ways of loading a shader:
     //
@@ -155,7 +147,7 @@ void FaceTracking::draw()
         ofTranslate(faceRect.x, faceRect.y);
         ofScale(faceRect.width/BUFFER_SIZE*1.0f, faceRect.height/BUFFER_SIZE*1.0f);
         drawFeaturesBlur();
-        drawFeatures();
+        //drawFeatures();
         
         
         ofPopMatrix();

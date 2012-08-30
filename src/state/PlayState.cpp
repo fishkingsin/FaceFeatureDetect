@@ -7,7 +7,7 @@
 //
 
 #include "PlayState.h"
-
+FaceFeature *feature[4];
 string PlayState::getName()
 {
 	return "PlayState";
@@ -20,12 +20,62 @@ void PlayState::setup(){
     
     // enable depth->video image calibration
     faceTracking.setup();
+        getSharedData().panel.setWhichPanel("FaceTracking");
+    getSharedData().panel.setWhichColumn(0);
+    getSharedData().panel.addSlider("minFaceAreaW",faceTracking.minFaceAreaW,1,512);
+	getSharedData().panel.addSlider("minFaceAreaH",faceTracking.minFaceAreaH,1,512);
+    getSharedData().panel.addSlider("faceOffsetX",faceTracking.faceOffset.x,1,512);
+    getSharedData().panel.addSlider("faceOffsetY",faceTracking.faceOffset.y,1,512);
+    getSharedData().panel.addSlider("faceOffsetW",faceTracking.faceOffset.width,1,512);
+    getSharedData().panel.addSlider("faceOffsetH",faceTracking.faceOffset.height,1,512);
+    
+    feature[0] = &faceTracking.leftEye;
+    feature[1] = &faceTracking.rightEye;
+    feature[2] = &faceTracking.nose;
+    feature[3] = &faceTracking.mouth;
+    for(int i = 0 ; i < 4 ; i++)
+    {
+        getSharedData().panel.setWhichColumn(i+1) ;
+        getSharedData().panel.addSlider(feature[i]->name+"minFeatureArea",feature[i]->minArea,1,BUFFER_SIZE);
+    
+        getSharedData().panel.addSlider(feature[i]->name+"ROIL_X",feature[i]->ROI.x,1,BUFFER_SIZE);
+        getSharedData().panel.addSlider(feature[i]->name+"ROIL_W",feature[i]->ROI.width,1,BUFFER_SIZE);
+        getSharedData().panel.addSlider(feature[i]->name+"ROIL_Y",feature[i]->ROI.y,1,BUFFER_SIZE);
+        getSharedData().panel.addSlider(feature[i]->name+"ROIL_H",feature[i]->ROI.height,1,BUFFER_SIZE);
+    
+    //gui.addPage("OffSet");
+        getSharedData().panel.addSlider( feature[i]->name+"offset.x",feature[i]->offset.x,-BUFFER_SIZE,BUFFER_SIZE);
+        getSharedData().panel.addSlider( feature[i]->name+"offset.y",feature[i]->offset.y,-BUFFER_SIZE,BUFFER_SIZE);
+        getSharedData().panel.addSlider(feature[i]->name+ "offset.width",feature[i]->offset.width,-BUFFER_SIZE,BUFFER_SIZE);
+        getSharedData().panel.addSlider(feature[i]->name+ "offset.height",feature[i]->offset.height,-BUFFER_SIZE,BUFFER_SIZE);
+    }
+
     box2d.setup();
     bCapture = false;
 }
 
 //--------------------------------------------------------------
 void PlayState::update(){
+    
+    faceTracking.minFaceAreaW = getSharedData().panel.getValueF("minFaceAreaW");
+    faceTracking.minFaceAreaH = getSharedData().panel.getValueF("minFaceAreaH");
+    faceTracking.faceOffset.x = getSharedData().panel.getValueF("faceOffsetX");
+    faceTracking.faceOffset.y = getSharedData().panel.getValueF("faceOffsetY");
+    faceTracking.faceOffset.width = getSharedData().panel.getValueF("faceOffsetW");
+    faceTracking.faceOffset.height = getSharedData().panel.getValueF("faceOffsetH");
+    for(int i = 0 ; i < 4 ; i++)
+    {
+        feature[i]->minArea = getSharedData().panel.getValueF(feature[i]->name+"minFeatureArea");
+        feature[i]->ROI.x = getSharedData().panel.getValueF(feature[i]->name+"ROIL_X");
+        feature[i]->ROI.width = getSharedData().panel.getValueF(feature[i]->name+"ROIL_W");
+        feature[i]->ROI.y = getSharedData().panel.getValueF(feature[i]->name+"ROIL_Y");
+        feature[i]->ROI.height = getSharedData().panel.getValueF(feature[i]->name+"ROIL_H");
+        feature[i]->offset.x = getSharedData().panel.getValueF(feature[i]->name+"offset.x");
+        feature[i]->offset.y = getSharedData().panel.getValueF(feature[i]->name+"offset.y");
+        feature[i]->offset.width = getSharedData().panel.getValueF(feature[i]->name+"offset.width");
+        feature[i]->offset.height = getSharedData().panel.getValueF(feature[i]->name+"offset.height");
+    
+    }
 	faceTracking.update();
     box2d.update();
 }

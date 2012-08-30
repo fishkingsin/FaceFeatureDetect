@@ -21,10 +21,6 @@
     </SliderFloat_faceOffsetW>
     <SliderFloat_faceOffsetH>
         <name>faceOffsetH</name>
-        <value>26.55</value>
+        <value>320.375</value>
     </SliderFloat_faceOffsetH>
-    <ComboBox_FaceProfile>
-        <name>FaceProfile</name>
-        <value>0</value>
-    </ComboBox_FaceProfile>
 </controls>

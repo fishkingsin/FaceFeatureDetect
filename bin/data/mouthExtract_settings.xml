@@ -35,4 +35,8 @@
         <name>offset.height</name>
         <value>51.2</value>
     </SliderFloat_offset.height>
+    <ComboBox_FaceProfile>
+        <name>FaceProfile</name>
+        <value>0</value>
+    </ComboBox_FaceProfile>
 </controls>
