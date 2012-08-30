@@ -20,8 +20,8 @@
 
 #include "ofxBlur.h"
 
-#define camW 1280
-#define camH 720
+#define camW 640
+#define camH 480
 #define BUFFER_SIZE 256
 #define QUARTER_SIZE 0.25
 class FaceFeature

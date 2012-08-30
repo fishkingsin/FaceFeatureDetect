@@ -39,7 +39,7 @@ void EditState::setup(){
 void EditState::update(){
     if(currSelection!=prevSelection)
     {
-        currSelection=prevSelection ;
+        prevSelection  = currSelection;
         faceData.setup("face.jpg",file[currSelection]);
     }
 }
@@ -56,7 +56,16 @@ void EditState::stateExit() {
 }
 //--------------------------------------------------------------
 void EditState::keyPressed(int key){
-    
+    switch(key)
+    {
+        case ' ':
+            if(!faceData.warpper.isActive())faceData.warpper.activate();
+            else faceData.warpper.deactivate();
+            break;
+        case 's':
+            faceData.saveSetting();
+            break;
+    }
 }
 
 //--------------------------------------------------------------
