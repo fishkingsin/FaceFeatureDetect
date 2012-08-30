@@ -1,7 +1,7 @@
 <DATA>
-    <PREFIX>a</PREFIX>
-    <BACKGROUND>background.png</BACKGROUND>
-    <OVERLAY>overlay.png</OVERLAY>
+    <PREFIX>d</PREFIX>
+    <BACKGROUND>face_profile/background.png</BACKGROUND>
+    <OVERLAY>face_profile/overlay.png</OVERLAY>
     <POINTS>
         <POINT>
             <X>0</X>

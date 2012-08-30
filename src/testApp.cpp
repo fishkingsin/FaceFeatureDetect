@@ -78,8 +78,12 @@ void testApp::draw(){
         while(!lastFileNames.empty())
         {
             string file_name = lastFileNames.back();
-//            FaceData faceData;
-//            faceData.setup(file_name,"settings01.xml");
+            FaceData faceData;
+            faceData.setup(file_name,"face_profile/settings_a.xml");
+            faceData.setup(file_name,"face_profile/settings_b.xml");
+            faceData.setup(file_name,"face_profile/settings_c.xml");
+            faceData.setup(file_name,"face_profile/settings_d.xml");
+            faceData.setup(file_name,"face_profile/settings_e.xml");
             //TO_DO load image and map the face on shoes;
             lastFileNames.pop_back();
         }

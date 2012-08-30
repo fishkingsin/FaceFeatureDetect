@@ -1,0 +1,23 @@
+<DATA>
+    <PREFIX>b</PREFIX>
+    <BACKGROUND>face_profile/background.png</BACKGROUND>
+    <OVERLAY>face_profile/overlay.png</OVERLAY>
+    <POINTS>
+        <POINT>
+            <X>0</X>
+            <Y>0</Y>
+        </POINT>
+        <POINT>
+            <X>640</X>
+            <Y>0</Y>
+        </POINT>
+        <POINT>
+            <X>640</X>
+            <Y>480</Y>
+        </POINT>
+        <POINT>
+            <X>0</X>
+            <Y>480</Y>
+        </POINT>
+    </POINTS>
+</DATA>
