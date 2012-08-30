@@ -1,11 +1,11 @@
 <controls>
     <SliderInt_minFaceAreaW>
         <name>minFaceAreaW</name>
-        <value>118</value>
+        <value>205</value>
     </SliderInt_minFaceAreaW>
     <SliderInt_minFaceAreaH>
         <name>minFaceAreaH</name>
-        <value>113</value>
+        <value>266</value>
     </SliderInt_minFaceAreaH>
     <SliderFloat_faceOffsetX>
         <name>faceOffsetX</name>

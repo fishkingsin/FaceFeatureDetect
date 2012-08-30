@@ -10,13 +10,18 @@
 #define FaceFeatureDetect_FaceTracking_h
 #include "ofxCvHaarFinder.h"
 #define _USE_LIVE_VIDEO		// uncomment this to use a live camera
+
+#define USE_QTKIT
+#ifdef USE_QTKIT
+#include "ofxQTKitVideoGrabber.h"
+#endif
 // otherwise, we'll use a movie file
 #include "ofxSimpleGuiToo.h"
-#include "ofxKinect.h"
+
 #include "ofxBlur.h"
 
-#define camW 640
-#define camH 480
+#define camW 1280
+#define camH 720
 #define BUFFER_SIZE 256
 #define QUARTER_SIZE 0.25
 class FaceFeature
@@ -195,25 +200,12 @@ public:
     void drawFeatures();
     void drawFeaturesBlur();
     void drawMarkers();
-    ofxKinect kinect;
-    bool bKinect;
-	ofxCvGrayscaleImage grayThreshNear; // the near thresholded image
-	ofxCvGrayscaleImage grayThreshFar; // the far thresholded image
-    ofxCvGrayscaleImage grayDepthThres; // the far thresholded image
-    bool bThreshWithOpenCV;
-    int nearThreshold;
-	int farThreshold;
-	int angle;
-    
-    int kminArea;
-    int kmaxArea;
-    int knConsidered;
-    bool kbFindHoles;
-    bool kbUseApproximation;
-    
-    ofxCvContourFinder contourFinder;
 #ifdef _USE_LIVE_VIDEO
+#ifdef USE_QTKIT
+    ofxQTKitVideoGrabber vidGrabber;
+#else
     ofVideoGrabber 		vidGrabber;
+#endif
 #else
     ofVideoPlayer 		vidPlayer;
 #endif

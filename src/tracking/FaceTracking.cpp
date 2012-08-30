@@ -12,39 +12,16 @@ static int minFaceAreaW =  50;
 static int minFaceAreaH =  50;
 void FaceTracking::setup()
 {
-    bKinect = false;
-    kinect.setRegistration(true);
-	kinect.init();
-	if(kinect.open())
-    {
-        bKinect = true;
-        
-        colorImg.allocate(kinect.width, kinect.height);
-        grayImage.allocate(kinect.width, kinect.height);
-        
-        grayThreshNear.allocate(kinect.width, kinect.height);
-        grayThreshFar.allocate(kinect.width, kinect.height);
-        grayDepthThres.allocate(kinect.width, kinect.height);
-        nearThreshold = 230;
-        farThreshold = 70;
-        bThreshWithOpenCV = true;
-        // zero the tilt on startup
-        angle = 0;
-        kinect.setCameraTiltAngle(angle);
-	}
-    else
-    {
-        
 #ifdef _USE_LIVE_VIDEO
-        vidGrabber.setVerbose(true);
-        vidGrabber.initGrabber(camW,camH);
+    vidGrabber.setVerbose(true);
+    vidGrabber.initGrabber(camW,camH);
 #else
-        vidPlayer.loadMovie("fingers.mov");
-        vidPlayer.play();
+    vidPlayer.loadMovie("fingers.mov");
+    vidPlayer.play();
 #endif
-        colorImg.allocate(camW,camH);
-        grayImage.allocate(camW,camH);
-    }
+    colorImg.allocate(camW,camH);
+    grayImage.allocate(camW,camH);
+    
     
     
 	facefinder.setup("haarcascade_frontalface_alt2.xml");
@@ -104,19 +81,7 @@ void FaceTracking::setup()
     mouth.setup("mouth","haarcascade_mcs_mouth.xml","mouthMask.png",64,48);
     
     
-    gui.addPage("Kinect");
-    gui.addSlider("nearThreshold",nearThreshold,0,255);
-    gui.addSlider("farThreshold",farThreshold,0,255);
-    gui.addToggle("bThreshWithOpenCV",bThreshWithOpenCV);
-    // zero the tilt on startup
-    gui.addSlider("angle",angle,-90,90);
-    
-    gui.addSlider("kminArea",kminArea,1,kinect.getWidth()*kinect.getHeight()*0.5f);
-    gui.addSlider("kmaxArea",kmaxArea,1,kinect.getWidth()*kinect.getHeight());
-    gui.addSlider("knConsidered",knConsidered,1,10);
-    gui.addToggle("kbFindHoles",kbFindHoles);
-    gui.addToggle("kbUseApproximation",kbUseApproximation);
-	gui.loadFromXML();
+    gui.loadFromXML();
     
     // There are 3 of ways of loading a shader:
     //
@@ -129,69 +94,30 @@ void FaceTracking::setup()
     //  3 - And the third one it´s passing the shader programa on a single string;
     //
     string shaderProgram = "#version 120\n \
-#extension GL_ARB_texture_rectangle : enable\n \
-\
-uniform sampler2DRect tex0;\
-uniform sampler2DRect maskTex;\
-\
-void main (void){\
-vec2 pos = gl_TexCoord[0].st;\
-\
-vec3 src = texture2DRect(tex0, pos).rgb;\
-float mask = texture2DRect(maskTex, pos).r;\
-\
-gl_FragColor = vec4( src , mask);\
-}";
-alphaMaskShader.setupShaderFromSource(GL_FRAGMENT_SHADER, shaderProgram);
+    #extension GL_ARB_texture_rectangle : enable\n \
+    \
+    uniform sampler2DRect tex0;\
+    uniform sampler2DRect maskTex;\
+    \
+    void main (void){\
+    vec2 pos = gl_TexCoord[0].st;\
+    \
+    vec3 src = texture2DRect(tex0, pos).rgb;\
+    float mask = texture2DRect(maskTex, pos).r;\
+    \
+    gl_FragColor = vec4( src , mask);\
+    }";
+    alphaMaskShader.setupShaderFromSource(GL_FRAGMENT_SHADER, shaderProgram);
     alphaMaskShader.linkProgram();
     
 }
 void FaceTracking::update()
 {
     bool bNewFrame = false;
-    if(bKinect)
-    {
-        kinect.update();
-        kinect.setCameraTiltAngle(angle);
-        // there is a new frame and we are connected
-        if(kinect.isFrameNew()) {
-            bNewFrame = true;
-            // load grayscale depth image from the kinect source
-            grayDepthThres.setFromPixels(kinect.getDepthPixels(), kinect.width, kinect.height);
-            colorImg.setFromPixels(kinect.getPixels(), kinect.width, kinect.height);
-            
-            // we do two thresholds - one for the far plane and one for the near plane
-            // we then do a cvAnd to get the pixels which are a union of the two thresholds
-            //            if(bThreshWithOpenCV) {
-            grayThreshNear = grayDepthThres;
-            grayThreshFar = grayDepthThres;
-            grayThreshNear.threshold(nearThreshold, true);
-            grayThreshFar.threshold(farThreshold);
-            cvAnd(grayThreshNear.getCvImage(), grayThreshFar.getCvImage(), grayDepthThres.getCvImage(), NULL);
-            
-            
-            // update the cv images
-            grayDepthThres.flagImageChanged();
-            
-            // find contours which are between the size of 20 pixels and 1/3 the w*h pixels.
-            // also, find holes is set to true so we will get interior contours as well....
-            contourFinder.findContours(grayDepthThres, kminArea,
-                                       kmaxArea,
-                                       knConsidered,
-                                       kbFindHoles,
-                                       kbUseApproximation);
-            if(contourFinder.blobs.size()>0)
-            {
-                grayImage = colorImg;
-                ofRectangle cur = contourFinder.blobs[0].boundingRect;
-                processTracking(cur.x,cur.y,cur.width,cur.height,kinect.getTextureReference());
-            }
-        }
-    }
-    else
+    
     {
 #ifdef _USE_LIVE_VIDEO
-        vidGrabber.grabFrame();
+        vidGrabber.update();
         bNewFrame = vidGrabber.isFrameNew();
 #else
         vidPlayer.idleMovie();
@@ -215,21 +141,13 @@ void FaceTracking::update()
 }
 void FaceTracking::savingFace(string fn)
 {
-
+    
     ofSaveImage(facePixels, fn);
 }
 void FaceTracking::draw()
 {
     ofSetColor(ofColor::white);
-    if(bKinect)
     {
-        kinect.drawDepth(10, 10, 400, 300);
-		kinect.draw(420, 10, 400, 300);
-		
-		grayDepthThres.draw(10, 320, 400, 300);
-		contourFinder.draw(10, 320, 400, 300);
-    }
-    else{
         vidGrabber.draw(0,0);
         
         
@@ -357,6 +275,5 @@ void FaceTracking::processTracking(int x, int y , int w, int h , ofTexture &tex)
 }
 void FaceTracking::exit()
 {
-    kinect.setCameraTiltAngle(0); // zero the tilt on exit
-	kinect.close();
+
 }
