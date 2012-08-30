@@ -10,6 +10,7 @@
 #define FaceFeatureDetect_FaceMapper_h
 #include "ofMain.h"
 #include "ofxXmlSettings.h"
+#include "ofxGLWarper.h"
 #define gridRes 8
 class FaceData
 {
@@ -21,6 +22,11 @@ public:
     ofPoint vPt[4];
     string imageFile;
     string prefix;
+    ofxGLWarper warpper;
+    FaceData()
+    {
+        
+    }
     void setup(string img_fn, string setting_fn)
     {
 
@@ -63,7 +69,8 @@ public:
                 prefix = xml.getValue("PREFIX","a");
                 backgroundImage.loadImage(xml.getValue("BACKGROUND","background.png"));
                 overlayImage.loadImage(xml.getValue("OVERLAY","overlay.png"));
-                //mapMesh.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
+                warpper.setup(0,0,faceImage.width,faceImage.height);
+                warpper.load("warpper_"+prefix+".xml");
                 if(xml.pushTag("POINTS"))
                 {
                     int numTag = xml.getNumTags("POINT");
@@ -91,54 +98,26 @@ public:
     {
         ofEnableAlphaBlending();
         backgroundImage.draw(0,0);
-        faceImage.getTextureReference().bind();
-        glBegin(GL_QUADS);
+//        faceImage.getTextureReference().bind();
+//        glBegin(GL_QUADS);
+//        
+//        
+//        glTexCoord2f(tPt[0].x, tPt[0].y);
+//        glVertex2f(vPt[0].x, vPt[0].y);
+//        glTexCoord2f(tPt[1].x, tPt[1].y);
+//        glVertex2f(vPt[1].x, vPt[1].y);
+//        glTexCoord2f(tPt[2].x, tPt[2].y);
+//        glVertex2f(vPt[2].x, vPt[2].y);
+//        glTexCoord2f(tPt[3].x, tPt[3].y);
+//        glVertex2f(vPt[3].x, vPt[3].y);
+//                
+//        glEnd();
+//        faceImage.getTextureReference().unbind();
+        warpper.begin();
+        faceImage.draw(0,0);
+        warpper.end();
+        warpper.draw();
         
-        
-        glTexCoord2f(tPt[0].x, tPt[0].y);
-        glVertex2f(vPt[0].x, vPt[0].y);
-        glTexCoord2f(tPt[1].x, tPt[1].y);
-        glVertex2f(vPt[1].x, vPt[1].y);
-        glTexCoord2f(tPt[2].x, tPt[2].y);
-        glVertex2f(vPt[2].x, vPt[2].y);
-        glTexCoord2f(tPt[3].x, tPt[3].y);
-        glVertex2f(vPt[3].x, vPt[3].y);
-                
-        glEnd();
-        ofPoint bezSurfPoints[gridRes][gridRes];
-        for(int i = 0; i <= gridRes; i++) {
-            for(int j = 0; j <= gridRes; j++) {
-                
-                
-                
-                
-                bezSurfPoints[i][j] = ofPoint(0, 0);
-                
-            } 
-        } 
-
-        faceImage.getTextureReference().unbind();
-        for(int i = 0; i < gridRes; i++) {
-            for(int j = 0; j < gridRes; j++) {
-                faceImage.getTextureReference().bind();
-                glBegin(GL_QUADS);  
-                
-                glTexCoord2f((i) * (faceImage.getWidth()/gridRes), (j) * (faceImage.getHeight()/gridRes));
-                glVertex2f(bezSurfPoints[i][j].x, bezSurfPoints[i][j].y);  
-                
-                glTexCoord2f((i+1) * (faceImage.getWidth()/gridRes), (j) * (faceImage.getHeight()/gridRes));  
-                glVertex2f(bezSurfPoints[i+1][j].x, bezSurfPoints[i+1][j].y);  
-                
-                glTexCoord2f((i+1) * (faceImage.getWidth()/gridRes), (j+1) * (faceImage.getHeight()/gridRes)); 
-                glVertex2f(bezSurfPoints[i+1][j+1].x, bezSurfPoints[i+1][j+1].y);  
-                
-                glTexCoord2f((i) * (faceImage.getWidth()/gridRes), (j+1) * (faceImage.getHeight()/gridRes)); 
-                glVertex2f(bezSurfPoints[i][j+1].x, bezSurfPoints[i][j+1].y);
-                glEnd();  
-                faceImage.getTextureReference().unbind(); 		
-            }
-        }
-
         overlayImage.draw(0,0);
         
     }
@@ -159,14 +138,21 @@ public:
     }
     void saveSetting()
     {
-        
+        warpper.save("warpper_"+prefix+".xml");
     }
 };
 
 class FaceMapper
 {
 public:
-    
+    void setup()
+    {
+        
+    }
+    void update()
+    {
+        
+    }
 };
 
 

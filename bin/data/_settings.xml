@@ -23,4 +23,8 @@
         <name>faceOffsetH</name>
         <value>26.55</value>
     </SliderFloat_faceOffsetH>
+    <ComboBox_FaceProfile>
+        <name>FaceProfile</name>
+        <value>0</value>
+    </ComboBox_FaceProfile>
 </controls>

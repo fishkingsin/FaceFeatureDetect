@@ -1,7 +1,7 @@
 <controls>
     <SliderInt_minFaceAreaW>
         <name>minFaceAreaW</name>
-        <value>243</value>
+        <value>205</value>
     </SliderInt_minFaceAreaW>
     <SliderInt_minFaceAreaH>
         <name>minFaceAreaH</name>

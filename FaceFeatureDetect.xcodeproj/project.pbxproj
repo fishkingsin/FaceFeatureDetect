@@ -77,6 +77,9 @@
 		1B51177215EF5675002BA5CB /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B51177115EF5675002BA5CB /* QTKit.framework */; };
 		1B51177515EF5681002BA5CB /* CoreMediaIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B51177315EF5681002BA5CB /* CoreMediaIO.framework */; };
 		1B51177615EF5681002BA5CB /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B51177415EF5681002BA5CB /* CoreVideo.framework */; };
+		1B51182A15EF66D8002BA5CB /* ofxGLWarper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B51180C15EF66D8002BA5CB /* ofxGLWarper.cpp */; };
+		1B51186A15EF6BC7002BA5CB /* PlayState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B51186915EF6BC7002BA5CB /* PlayState.cpp */; };
+		1B51186C15EF6DEB002BA5CB /* EditState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B51186B15EF6DEB002BA5CB /* EditState.cpp */; };
 		1BBEA4A115EE26680044E0FD /* MyBox2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BBEA49A15EE26680044E0FD /* MyBox2D.cpp */; };
 		1BBEA4A215EE26680044E0FD /* FaceMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BBEA49D15EE26680044E0FD /* FaceMapper.cpp */; };
 		1BBEA4A315EE26680044E0FD /* FaceTracking.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BBEA49F15EE26680044E0FD /* FaceTracking.cpp */; };
@@ -346,6 +349,17 @@
 		1B51177115EF5675002BA5CB /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = ../../../../../../System/Library/Frameworks/QTKit.framework; sourceTree = "<group>"; };
 		1B51177315EF5681002BA5CB /* CoreMediaIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMediaIO.framework; path = ../../../../../../System/Library/Frameworks/CoreMediaIO.framework; sourceTree = "<group>"; };
 		1B51177415EF5681002BA5CB /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = ../../../../../../System/Library/Frameworks/CoreVideo.framework; sourceTree = "<group>"; };
+		1B51180C15EF66D8002BA5CB /* ofxGLWarper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxGLWarper.cpp; sourceTree = "<group>"; };
+		1B51180D15EF66D8002BA5CB /* ofxGLWarper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxGLWarper.h; sourceTree = "<group>"; };
+		1B51183915EF6A0D002BA5CB /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		1B51183A15EF6A0D002BA5CB /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		1B51183C15EF6A0D002BA5CB /* ofxState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxState.h; sourceTree = "<group>"; };
+		1B51183D15EF6A0D002BA5CB /* ofxStateMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxStateMachine.h; sourceTree = "<group>"; };
+		1B51186615EF6B58002BA5CB /* SharedData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SharedData.h; path = state/SharedData.h; sourceTree = "<group>"; };
+		1B51186715EF6B5D002BA5CB /* EditState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditState.h; path = state/EditState.h; sourceTree = "<group>"; };
+		1B51186815EF6B5D002BA5CB /* PlayState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayState.h; path = state/PlayState.h; sourceTree = "<group>"; };
+		1B51186915EF6BC7002BA5CB /* PlayState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlayState.cpp; path = state/PlayState.cpp; sourceTree = "<group>"; };
+		1B51186B15EF6DEB002BA5CB /* EditState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EditState.cpp; path = state/EditState.cpp; sourceTree = "<group>"; };
 		1BBEA49A15EE26680044E0FD /* MyBox2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyBox2D.cpp; sourceTree = "<group>"; };
 		1BBEA49B15EE26680044E0FD /* MyBox2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyBox2D.h; sourceTree = "<group>"; };
 		1BBEA49D15EE26680044E0FD /* FaceMapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FaceMapper.cpp; sourceTree = "<group>"; };
@@ -1076,6 +1090,56 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		1B5117F815EF66D8002BA5CB /* ofxGLWarper */ = {
+			isa = PBXGroup;
+			children = (
+				1B51180B15EF66D8002BA5CB /* src */,
+			);
+			name = ofxGLWarper;
+			path = ../../../addons/ofxGLWarper;
+			sourceTree = "<group>";
+		};
+		1B51180B15EF66D8002BA5CB /* src */ = {
+			isa = PBXGroup;
+			children = (
+				1B51180C15EF66D8002BA5CB /* ofxGLWarper.cpp */,
+				1B51180D15EF66D8002BA5CB /* ofxGLWarper.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		1B51183815EF6A0D002BA5CB /* ofxStateMachine */ = {
+			isa = PBXGroup;
+			children = (
+				1B51183915EF6A0D002BA5CB /* .gitignore */,
+				1B51183A15EF6A0D002BA5CB /* README.md */,
+				1B51183B15EF6A0D002BA5CB /* src */,
+			);
+			name = ofxStateMachine;
+			path = ../../../addons/ofxStateMachine;
+			sourceTree = "<group>";
+		};
+		1B51183B15EF6A0D002BA5CB /* src */ = {
+			isa = PBXGroup;
+			children = (
+				1B51183C15EF6A0D002BA5CB /* ofxState.h */,
+				1B51183D15EF6A0D002BA5CB /* ofxStateMachine.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		1B51186515EF6A3B002BA5CB /* state */ = {
+			isa = PBXGroup;
+			children = (
+				1B51186715EF6B5D002BA5CB /* EditState.h */,
+				1B51186B15EF6DEB002BA5CB /* EditState.cpp */,
+				1B51186815EF6B5D002BA5CB /* PlayState.h */,
+				1B51186915EF6BC7002BA5CB /* PlayState.cpp */,
+				1B51186615EF6B58002BA5CB /* SharedData.h */,
+			);
+			name = state;
+			sourceTree = "<group>";
+		};
 		1BBEA49915EE26680044E0FD /* display */ = {
 			isa = PBXGroup;
 			children = (
@@ -1480,6 +1544,8 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				1B51183815EF6A0D002BA5CB /* ofxStateMachine */,
+				1B5117F815EF66D8002BA5CB /* ofxGLWarper */,
 				1B51174215EF55E5002BA5CB /* ofxQTKitVideoGrabber */,
 				1B21AEC415EDDA6A00DC1D8A /* ofxBox2d */,
 				1B18558B15E76F9D0049A9FD /* ofxCv */,
@@ -1566,6 +1632,7 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				1B51186515EF6A3B002BA5CB /* state */,
 				1BBEA49915EE26680044E0FD /* display */,
 				1BBEA49C15EE26680044E0FD /* tracking */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
@@ -2042,6 +2109,9 @@
 				1BBEA4A215EE26680044E0FD /* FaceMapper.cpp in Sources */,
 				1BBEA4A315EE26680044E0FD /* FaceTracking.cpp in Sources */,
 				1B51176A15EF55E5002BA5CB /* ofxQTKitVideoGrabber.mm in Sources */,
+				1B51182A15EF66D8002BA5CB /* ofxGLWarper.cpp in Sources */,
+				1B51186A15EF6BC7002BA5CB /* PlayState.cpp in Sources */,
+				1B51186C15EF6DEB002BA5CB /* EditState.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

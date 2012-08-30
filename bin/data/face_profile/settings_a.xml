@@ -4,20 +4,20 @@
     <OVERLAY>face_profile/overlay.png</OVERLAY>
     <POINTS>
         <POINT>
-            <X>0</X>
-            <Y>0</Y>
+            <X>100</X>
+            <Y>100</Y>
         </POINT>
         <POINT>
-            <X>640</X>
-            <Y>0</Y>
+            <X>500</X>
+            <Y>200</Y>
         </POINT>
         <POINT>
-            <X>640</X>
-            <Y>480</Y>
+            <X>600</X>
+            <Y>400</Y>
         </POINT>
         <POINT>
-            <X>0</X>
-            <Y>480</Y>
+            <X>50</X>
+            <Y>350</Y>
         </POINT>
     </POINTS>
 </DATA>
