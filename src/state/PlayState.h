@@ -53,7 +53,7 @@ public:
     MyBox2D box2d;
     FaceTracking faceTracking;
     
-    
+    bool bBox2D;
     
     
     bool bCapture;

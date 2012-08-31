@@ -38,18 +38,21 @@ struct DataSet
 {
     FaceFeature * feature;
     ofShader *shader;
+    float scaleX,scaleY;
 };
 // A Custom Particle extedning the box2d circle
-class CustomParticle : public ofxBox2dCircle {
+class CustomParticle : public ofxBox2dRect {
 	
 public:
 	
-	void setupTheCustomData(FaceFeature * feature , ofShader *shader) {
+	void setupTheCustomData(FaceFeature * feature , ofShader *shader , float scaleX, float scaleY) {
         
 		setData(new DataSet);
         DataSet* theData = (DataSet*)getData();
         theData->feature = feature;
         theData->shader = shader;
+        theData->scaleX = scaleX;
+        theData->scaleY = scaleY;
 		printf("setting the custom data!\n");
 		
 	}
@@ -57,6 +60,7 @@ public:
 	void draw() {
 		DataSet* theData = (DataSet*)getData();
         FaceFeature * feature = theData->feature;
+        ofShader * shader = theData->shader;
 		if(theData) {
 			
 			// Evan though we know the data object lets just 
@@ -64,19 +68,34 @@ public:
 			// you would use this when using a contact listener
 			// or tapping into box2d's solver.
 			
-			float radius = getRadius();
+			float _width = getWidth();
+			float _height = getHeight();
 			ofPushMatrix();
 			ofTranslate(getPosition());
 			ofRotateZ(getRotation());
 			//ofSetColor(theData->color);
-			ofFill();
-			ofCircle(0, 0, radius);	
+			ofNoFill();
+			//ofCircle(0, 0, radius);	
+            
+            
+            
+            shader->begin();
+            shader->setUniformTexture("maskTex", feature->mask, 1 );
+            
+            glPushMatrix();
+            //glTranslatef(rect.x,rect.y,0);
+            //glTranslatef(rect.x,rect.y,0);
+            glScalef(theData->scaleX,theData->scaleY,1);
+            {
+//                feature->draw(0,0,feature->rect.width,feature->rect.height);
+                feature->draw(0,0,feature->rect.width,feature->rect.height);
+            }
+            glPopMatrix();
+            shader->end();
 			
-			ofSetColor(255);
-            feature->drawEffect(*theData->shader);
-			//ofDrawBitmapString(theData->name, -5, 5);
-			ofPopMatrix();
+            ofPopMatrix();
 		}
+        ofxBox2dRect::draw();
 	}
     
     

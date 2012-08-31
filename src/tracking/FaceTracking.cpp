@@ -167,14 +167,12 @@ void FaceTracking::draw()
         vidGrabber.draw(0,0);
         
         
-        ofPushMatrix();
-        ofTranslate(faceRect.x, faceRect.y);
-        ofScale(faceRect.width/BUFFER_SIZE*1.0f, faceRect.height/BUFFER_SIZE*1.0f);
+        
         drawFeaturesBlur();
         //drawFeatures();
         
         
-        ofPopMatrix();
+        
         
         
     }
@@ -214,11 +212,14 @@ void FaceTracking::drawFeatures()
 }
 void FaceTracking::drawFeaturesBlur()
 {
+    ofPushMatrix();
+    ofTranslate(faceRect.x, faceRect.y);
+    ofScale(faceRect.width/BUFFER_SIZE*1.0f, faceRect.height/BUFFER_SIZE*1.0f);
     leftEye.drawEffect(alphaMaskShader,&blurs[0]);
     rightEye.drawEffect(alphaMaskShader,&blurs[1]);
     nose.drawEffect(alphaMaskShader,&blurs[2]);
     mouth.drawEffect(alphaMaskShader,&blurs[3]);
-    
+    ofPopMatrix();
     //        blurs[0].begin();
     //        {
     //            leftEye.draw(0,0);

@@ -76,11 +76,13 @@ void PlayState::setup(){
 
     box2d.setup();
     bCapture = false;
+    bBox2D = false;
 }
 
 //--------------------------------------------------------------
 void PlayState::update(){
-    
+    if(!bBox2D)
+    {
     faceTracking.minFaceAreaW = getSharedData().panel.getValueF("minFaceAreaW");
     faceTracking.minFaceAreaH = getSharedData().panel.getValueF("minFaceAreaH");
     faceTracking.faceOffset.x = getSharedData().panel.getValueF("faceOffsetX");
@@ -102,17 +104,19 @@ void PlayState::update(){
     }
     faceTracking.numPlayer = getSharedData().numPlayer;
 	faceTracking.update();
-    box2d.update();
+    }
+    else box2d.update();
 }
 
 
 //--------------------------------------------------------------
 void PlayState::draw(){
+    
     faceTracking.draw();
     
     faceTracking.drawFeatures();
     
-    box2d.draw();
+    if(bBox2D)box2d.draw();
     if(bCapture)
     {
         bCapture = false;
@@ -186,11 +190,26 @@ void PlayState::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void PlayState::mousePressed(int x, int y, int button){
-    //    CustomParticle p;
-    //	p.setPhysics(1.0, 0.5, 0.3);
-    //	p.setup(box2d.box2d.getWorld(), x, y, ofRandom(20, 60));
-    //	p.setupTheCustomData(&faceTracking.leftEye,&faceTracking.alphaMaskShader);
-    //    box2d.addParticle( p);
+    bBox2D = !bBox2D;
+    if(bBox2D)
+    {
+        if(faceTracking.facefinder.blobs.size()>0)
+        {
+    CustomParticle p;
+    	p.setPhysics(1.0, 0.5, 0.3);
+        ofSetRectMode(OF_RECTMODE_CORNER);
+        float scaleX = faceTracking.faceRect.width/BUFFER_SIZE*1.0f;
+        float scaleY = faceTracking.faceRect.width/BUFFER_SIZE*1.0f;
+            float x = (faceTracking.faceRect.x+faceTracking.leftEye.rect.x)*scaleX;
+            float y = (faceTracking.faceRect.y+faceTracking.leftEye.rect.y)*scaleY;
+            float w = faceTracking.leftEye.rect.width*scaleX;
+            float h = faceTracking.leftEye.rect.height*scaleY;
+    p.setup(box2d.box2d.getWorld(),x,y,w,h);
+    	p.setupTheCustomData(&faceTracking.leftEye,&faceTracking.alphaMaskShader,scaleX,scaleY);
+        box2d.addParticle( p);
+        }
+    }
+    
 }
 
 //--------------------------------------------------------------
