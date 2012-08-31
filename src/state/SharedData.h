@@ -1,7 +1,7 @@
 /*
  *  SharedData.h
  *
- *  Copyright (c) 2011, Neil Mendoza, http://www.neilmendoza.com
+ *  Copyright (c) 2011, James Kong,  http://www.fishkingsin.com
  *  All rights reserved. 
  *  
  *  Redistribution and use in source and binary forms, with or without 
