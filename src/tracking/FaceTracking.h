@@ -44,8 +44,8 @@
 
 #include "ofxBlur.h"
 
-#define camW 1280
-#define camH 720
+#define camW 640
+#define camH 480
 #define BUFFER_SIZE 256
 #define QUARTER_SIZE 0.25
 class FaceFeature
@@ -155,7 +155,6 @@ public:
         {
             blur->begin();
             {
-                
                 draw(0,0);
             }
             blur->end();
@@ -166,10 +165,9 @@ public:
                 alpha.begin();
                 alpha.setUniformTexture("maskTex", mask, 1 );
                 
-                ofPushStyle();
-                ofSetColor(255,255,255);
+                
                 blur->draw(0,0,rect.width,rect.height);
-                ofPopStyle();
+                
                 alpha.end();
             }
             glPopMatrix();
@@ -253,8 +251,6 @@ public:
      minFaceAreaW ,
      minFaceAreaH ;
     int numPlayer;
-    
-    FaceFeature *feature[4];
 };
 
 

@@ -51,7 +51,7 @@ public:
     void keyReleased(int key) ;
     
 	string getName();
-    DoubleFaceData faceData;
+    FaceData faceData;
     int currSelection,prevSelection;
     vector<string >file;
 };

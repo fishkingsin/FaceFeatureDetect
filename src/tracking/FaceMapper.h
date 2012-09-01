@@ -128,66 +128,24 @@ public:
     ofImage faceImage2;
     void setup(string img_fn,string img_fn2, string setting_fn)
     {
-        backgroundImage.clear();
-        overlayImage.clear();
-        faceImage.clear();
         faceImage2.clear();
-        
-
-        imageFile = img_fn;
-        ofxXmlSettings xml;
-        
-        if(!xml.loadFile(setting_fn))
-        {
-            ofLog(OF_LOG_VERBOSE,"Faile to load "+setting_fn);
-            xml.addTag("DATA");
-            if(xml.pushTag("DATA"))
-            {
-                xml.setValue("PREFIX","a");
-                xml.setValue("BACKGROUND","background.png");
-                xml.setValue("OVERLAY","overlay.png");
-                
-            }
-            xml.saveFile(setting_fn);
-        }
-        else
-        {
-            
-            faceImage.loadImage(imageFile);
-            faceImage2.loadImage(img_fn2);
-
-            if(xml.pushTag("DATA"))
-            {
-                prefix = xml.getValue("PREFIX","a");
-                backgroundImage.loadImage(xml.getValue("BACKGROUND","background.png"));
-                overlayImage.loadImage(xml.getValue("OVERLAY","overlay.png"));
-                warpper.setup(0,0,faceImage.width,faceImage.height);
-                warpper.load("warpper_"+prefix+".xml");
-                warpper2.setup(0,0,faceImage2.width,faceImage2.height);
-                warpper2.load("warpper2_"+prefix+".xml");
-
-                xml.popTag();
-            }
-            save();
-        }
+        FaceData::setup(img_fn, setting_fn);
+        faceImage2.loadImage(img_fn2);
+        warpper2.load("warpper2_"+prefix+".xml");
     }
     void draw()
     {
         ofEnableAlphaBlending();
         backgroundImage.draw(0,0);
-        ofPushMatrix();
         warpper.begin();
         faceImage.draw(0,0);
         warpper.end();
         warpper.draw();
-        ofPopMatrix();
         
-        ofPushMatrix();
         warpper2.begin();
         faceImage2.draw(0,0);
         warpper2.end();
         warpper2.draw();
-        ofPopMatrix();
         
         overlayImage.draw(0,0);
         
@@ -195,7 +153,7 @@ public:
     void saveSetting()
     {
         FaceData::saveSetting();
-        warpper2.save("warpper2_"+prefix+".xml");
+        warpper.save("warpper2_"+prefix+".xml");
     }
 };
 class FaceMapper

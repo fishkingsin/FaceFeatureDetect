@@ -1,6 +1,8 @@
 <DATA>
     <COUNTER>2</COUNTER>
-    <PATH>/Library/WebServer/Documents/pic<PATH/>
+    <PATH>/Library/WebServer/Documents/pic
+        <PATH />
+    </PATH>
     <COUNTER>0</COUNTER>
     <PATH>./captures</PATH>
     <DIGI>5</DIGI>

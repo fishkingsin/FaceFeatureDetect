@@ -53,15 +53,6 @@ void testApp::setup(){
     stateMachine.getSharedData().panel.setWhichColumn(0);
 	stateMachine.getSharedData().panel.addChartPlotter("some chart", guiStatVarPointer("app fps", &appFrameRate, GUI_VAR_FLOAT, true, 2), 200, 50, 200, 5, 80);
 
-    vector <string> loglevels;
-    loglevels.push_back("OF_LOG_VERBOSE");
-    loglevels.push_back("OF_LOG_NOTICE");
-    loglevels.push_back("OF_LOG_WARNING");
-    loglevels.push_back("OF_LOG_ERROR");
-    loglevels.push_back("OF_LOG_FATAL_ERROR");
-    loglevels.push_back("OF_LOG_SILENT");
-    stateMachine.getSharedData().panel.addTextDropDown("LogLevel","LogLevel", 3, loglevels);
-    
 	
 	// initialise state machine
 	stateMachine.addState(new PlayState());
@@ -76,11 +67,7 @@ void testApp::setup(){
 //--------------------------------------------------------------
 void testApp::update(){
 	appFrameRate	= ofGetFrameRate();
-    int loglevel =  stateMachine.getSharedData().panel.getValueI("LogLevel");
-    if(ofLogLevel(loglevel)!=ofGetLogLevel())
-    {
-        ofSetLogLevel(ofLogLevel(loglevel));
-    }
+	
 }
 
 //--------------------------------------------------------------
