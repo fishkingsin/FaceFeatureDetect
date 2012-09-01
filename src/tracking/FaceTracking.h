@@ -34,6 +34,7 @@
 #define FaceFeatureDetect_FaceTracking_h
 #include "ofxCvHaarFinder.h"
 #define _USE_LIVE_VIDEO		// uncomment this to use a live camera
+#define _USE_IMAGE		// uncomment this to use a live camera
 
 //#define USE_QTKIT
 #ifdef USE_QTKIT
@@ -209,9 +210,13 @@ public:
     void exit();
     void processTracking(int x, int y , int w, int h , ofTexture& tex);
     void savingFace(string fn);
-    void drawFeatures();
-    void drawFeaturesBlur();
-    void drawMarkers();
+    void savingFace2(string fn);
+    void drawFeatures(int i);
+    void drawFeaturesBlur(int i);
+    void drawMarkers(int i);
+#ifdef _USE_IMAGE
+    ofImage faces;
+#else
 #ifdef _USE_LIVE_VIDEO
 #ifdef USE_QTKIT
     ofxQTKitVideoGrabber vidGrabber;
@@ -221,25 +226,26 @@ public:
 #else
     ofVideoPlayer 		vidPlayer;
 #endif
+#endif
     ofxCvHaarFinder facefinder;
     ofRectangle       faceOffset;
     
-    ofFbo faceBuffer;
-    ofMesh normFace;
-    ofPixels facePixels;
     
     ofxCvColorImage			colorImg;
     ofxCvColorImage			colorImgFace;
     
     ofxCvGrayscaleImage 	grayImage;
     ofxCvGrayscaleImage 	grayImageFace;
+
+    ofFbo faceBuffer[2];
+    ofMesh normFace[2];
+    ofPixels facePixels[2];
+    ofRectangle faceRect[2];
     
-    ofRectangle faceRect;
-    
-    FaceFeature leftEye;
-    FaceFeature rightEye;
-    FaceFeature nose;
-    FaceFeature mouth;
+    FaceFeature leftEye[2];
+    FaceFeature rightEye[2];
+    FaceFeature nose[2];
+    FaceFeature mouth[2];
     
     ofShader alphaMaskBlurShader;
     

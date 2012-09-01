@@ -381,6 +381,8 @@
 		516DF7E415EFA4F0001F9898 /* ofxStateMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxStateMachine.h; sourceTree = "<group>"; };
 		516DF81815EFA8E3001F9898 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = ../../../../../../../System/Library/Frameworks/QTKit.framework; sourceTree = "<group>"; };
 		516DF81A15EFA8FE001F9898 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = ../../../../../../../System/Library/Frameworks/CoreVideo.framework; sourceTree = "<group>"; };
+		51F6E8CB15F2668B007D3EBA /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		51F6E8CF15F2668B007D3EBA /* ofxPSBlend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPSBlend.h; sourceTree = "<group>"; };
 		586a8ec141bdfa82b3b0518c5749a6b0 /* config.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = config.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/config.h; sourceTree = SOURCE_ROOT; };
 		5928aa323f5c2690b06c837d8d036f55 /* UdpSocketWin.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = UdpSocketWin.cpp; path = ../../../addons/ofxOsc/libs/oscpack/src/ip/win32/UdpSocketWin.cpp; sourceTree = SOURCE_ROOT; };
 		59626d03c690200ad4e8b3a6968441b6 /* ml.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ml.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/ml/ml.hpp; sourceTree = SOURCE_ROOT; };
@@ -1094,6 +1096,24 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		51F6E8B615F2668B007D3EBA /* ofxPSBlend */ = {
+			isa = PBXGroup;
+			children = (
+				51F6E8CB15F2668B007D3EBA /* README.md */,
+				51F6E8CE15F2668B007D3EBA /* src */,
+			);
+			name = ofxPSBlend;
+			path = ../../../addons/ofxPSBlend;
+			sourceTree = "<group>";
+		};
+		51F6E8CE15F2668B007D3EBA /* src */ = {
+			isa = PBXGroup;
+			children = (
+				51F6E8CF15F2668B007D3EBA /* ofxPSBlend.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
 		5236346776db8ecc4b121ca323c68492 /* gpu */ = {
 			isa = PBXGroup;
 			children = (
@@ -1192,6 +1212,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				51F6E8B615F2668B007D3EBA /* ofxPSBlend */,
 				516DF7B915EFA4F0001F9898 /* ofxGLWarper */,
 				516DF7DF15EFA4F0001F9898 /* ofxStateMachine */,
 				516DF57D15EFA4B2001F9898 /* ofxBlur */,

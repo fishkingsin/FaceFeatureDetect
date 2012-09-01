@@ -4,6 +4,7 @@
 const static string settingFileName = "config.xml";
 //--------------------------------------------------------------
 void testApp::setup(){
+        ofEnableAlphaBlending();
     ofxXmlSettings xml  = stateMachine.getSharedData().xml;
     if(!xml.loadFile(settingFileName))
     {
@@ -37,11 +38,15 @@ void testApp::setup(){
     ofxControlPanel::setBackgroundColor(simpleColor(30, 30, 60, 100));
 	ofxControlPanel::setTextColor(simpleColor(240, 50, 50, 255));
     stateMachine.getSharedData().panel.setup(ofGetWidth(),ofGetHeight());
-	stateMachine.getSharedData().panel.loadFont("MONACO.TTF", 8);		
+	stateMachine.getSharedData().panel.loadFont("MONACO.TTF", 12);		
 	stateMachine.getSharedData().panel.addPanel("General", 4,false);
     
 	ofxControlPanel::setBackgroundColor(simpleColor(60, 30, 30, 100));	
 	stateMachine.getSharedData().panel.addPanel("FaceTracking", 5, false);
+    ofxControlPanel::setBackgroundColor(simpleColor(60, 30, 30, 100));	
+	stateMachine.getSharedData().panel.addPanel("FaceTracking0", 4, false);
+    ofxControlPanel::setBackgroundColor(simpleColor(60, 30, 30, 100));	
+	stateMachine.getSharedData().panel.addPanel("FaceTracking1", 4, false);
     
 	ofxControlPanel::setBackgroundColor(simpleColor(70, 70, 30, 100));	
 	stateMachine.getSharedData().panel.addPanel("FaceMapEdit", 4, false);
@@ -52,7 +57,14 @@ void testApp::setup(){
     stateMachine.getSharedData().panel.setWhichPanel("General");
     stateMachine.getSharedData().panel.setWhichColumn(0);
 	stateMachine.getSharedData().panel.addChartPlotter("some chart", guiStatVarPointer("app fps", &appFrameRate, GUI_VAR_FLOAT, true, 2), 200, 50, 200, 5, 80);
-
+    vector<string> loglevel;
+    loglevel.push_back("OF_LOG_VERBOSE");
+    loglevel.push_back("OF_LOG_NOTICE");
+    loglevel.push_back("OF_LOG_WARNING");
+    loglevel.push_back("OF_LOG_ERROR");
+    loglevel.push_back("OF_LOG_FATAL_ERROR");
+    loglevel.push_back("OF_LOG_SILENT");
+    stateMachine.getSharedData().panel.addTextDropDown("LogLevel","LogLevel", 0, loglevel);
 	
 	// initialise state machine
 	stateMachine.addState(new PlayState());
@@ -67,6 +79,11 @@ void testApp::setup(){
 //--------------------------------------------------------------
 void testApp::update(){
 	appFrameRate	= ofGetFrameRate();
+    int loglevel = stateMachine.getSharedData().panel.getValueI("LogLevel");
+    if(ofGetLogLevel()!=  loglevel  )
+    {
+        ofSetLogLevel((ofLogLevel)loglevel);
+    }
 	
 }
 

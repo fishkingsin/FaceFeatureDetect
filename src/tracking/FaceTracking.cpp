@@ -34,12 +34,16 @@
 
 void FaceTracking::setup()
 {
+#ifdef _USE_IMAGE
+    faces.loadImage("faces.jpg");
+#else
 #ifdef _USE_LIVE_VIDEO
     vidGrabber.setVerbose(true);
     vidGrabber.initGrabber(camW,camH);
 #else
-    vidPlayer.loadMovie("fingers.mov");
+    vidPlayer.loadMovie("faces.mov");
     vidPlayer.play();
+#endif
 #endif
     colorImg.allocate(camW,camH);
     grayImage.allocate(camW,camH);
@@ -52,11 +56,7 @@ void FaceTracking::setup()
     colorImgFace.allocate(BUFFER_SIZE,BUFFER_SIZE);
 	grayImageFace.allocate(BUFFER_SIZE,BUFFER_SIZE);
     
-    faceBuffer.allocate(BUFFER_SIZE,BUFFER_SIZE,GL_RGB);
-    facePixels.allocate(faceBuffer.getWidth(),faceBuffer.getHeight(),OF_IMAGE_COLOR);
-    faceBuffer.begin();
-    ofClear(0,0,0,255);
-    faceBuffer.end();
+    
     
     //    ofxBlur *blurs[4];
     //    blurs[0] = &blurLEye;
@@ -76,27 +76,33 @@ void FaceTracking::setup()
         blurs[i].setScale(4);
         blurs[i].setRotation(0);
     }
-    
-	normFace.addVertex(ofVec2f(0, 0));
-	normFace.addVertex(ofVec2f(faceBuffer.getWidth(), 0));
-	normFace.addVertex(ofVec2f(faceBuffer.getWidth(), faceBuffer.getHeight()));
-	normFace.addVertex(ofVec2f(0, faceBuffer.getHeight()));
-	normFace.addTexCoord(0);
-	normFace.addTexCoord(0);
-	normFace.addTexCoord(0);
-	normFace.addTexCoord(0);
-	normFace.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
+    for(int i = 0 ; i  < 2 ; i++)
+    {
+        faceBuffer[i].allocate(BUFFER_SIZE,BUFFER_SIZE,GL_RGB);
+        facePixels[i].allocate(faceBuffer[i].getWidth(),faceBuffer[i].getHeight(),OF_IMAGE_COLOR);
+        faceBuffer[i].begin();
+        ofClear(0,0,0,255);
+        faceBuffer[i].end();
+        normFace[i].addVertex(ofVec2f(0, 0));
+        normFace[i].addVertex(ofVec2f(faceBuffer[i].getWidth(), 0));
+        normFace[i].addVertex(ofVec2f(faceBuffer[i].getWidth(), faceBuffer[i].getHeight()));
+        normFace[i].addVertex(ofVec2f(0, faceBuffer[i].getHeight()));
+        normFace[i].addTexCoord(0);
+        normFace[i].addTexCoord(0);
+        normFace[i].addTexCoord(0);
+        normFace[i].addTexCoord(0);
+        normFace[i].setMode(OF_PRIMITIVE_TRIANGLE_FAN);
     
 	
 	
     
     
     
-    leftEye.setup("lefteye","haarcascade_mcs_lefteye.xml","leftEyeMask.png",64,48);
-    rightEye.setup("righteye","haarcascade_mcs_righteye.xml","rightEyeMask.png",64,48);
-    nose.setup("nose","haarcascade_mcs_nose.xml","noseMask.png",48,64);
-    mouth.setup("mouth","haarcascade_mcs_mouth.xml","mouthMask.png",64,48);
-    
+    leftEye[i].setup("lefteye","haarcascade_mcs_lefteye.xml","leftEyeMask.png",64,48);
+    rightEye[i].setup("righteye","haarcascade_mcs_righteye.xml","rightEyeMask.png",64,48);
+    nose[i].setup("nose","haarcascade_mcs_nose.xml","noseMask.png",48,64);
+    mouth[i].setup("mouth","haarcascade_mcs_mouth.xml","mouthMask.png",64,48);
+    }
    
     
     // There are 3 of ways of loading a shader:
@@ -125,6 +131,7 @@ void FaceTracking::setup()
     }";
     alphaMaskShader.setupShaderFromSource(GL_FRAGMENT_SHADER, shaderProgram);
     alphaMaskShader.linkProgram();
+    numPlayer = 0;
     
 }
 void FaceTracking::update()
@@ -132,6 +139,9 @@ void FaceTracking::update()
     bool bNewFrame = false;
     
     {
+#ifdef _USE_IMAGE
+        bNewFrame = true;
+#else
 #ifdef _USE_LIVE_VIDEO
         vidGrabber.update();
         bNewFrame = vidGrabber.isFrameNew();
@@ -139,18 +149,26 @@ void FaceTracking::update()
         vidPlayer.idleMovie();
         bNewFrame = vidPlayer.isFrameNew();
 #endif
-        
+#endif  
         if (bNewFrame){
+#ifdef _USE_IMAGE
+
+            colorImg.setFromPixels(faces.getPixels(), camW,camH);
+
+            grayImage = colorImg;
             
+            processTracking(0,0,camW,camH,faces.getTextureReference());
+#else
 #ifdef _USE_LIVE_VIDEO
             colorImg.setFromPixels(vidGrabber.getPixels(), camW,camH);
 #else
             colorImg.setFromPixels(vidPlayer.getPixels(), camW,camH);
 #endif
-            
+    
             grayImage = colorImg;
             
             processTracking(0,0,camW,camH,vidGrabber.getTextureReference());
+#endif
         }
         
     }
@@ -158,17 +176,39 @@ void FaceTracking::update()
 void FaceTracking::savingFace(string fn)
 {
     
-    ofSaveImage(facePixels, fn);
+    ofSaveImage(facePixels[0], fn);
+}
+void FaceTracking::savingFace2(string fn)
+{
+    
+    ofSaveImage(facePixels[1], fn);
 }
 void FaceTracking::draw()
 {
     ofSetColor(ofColor::white);
     {
+#ifdef _USE_IMAGE
+        faces.draw(0,0);
+#else
         vidGrabber.draw(0,0);
+#endif
+        ofPushMatrix();
+        ofPushStyle();
+        ofNoFill();
+        for(int i = 0 ; i < facefinder.blobs.size() ; i++)
+        {
+            
+            ofRectangle cur = facefinder.blobs[i].boundingRect;
+            ofRect(cur.x,cur.y,cur.width,cur.height);
+        }
+        ofPopStyle();
+        ofPopMatrix();
         
         
-        
-        drawFeaturesBlur();
+        ofPushMatrix();
+        drawFeaturesBlur(0);
+        drawFeaturesBlur(1);
+        ofPopMatrix();
         //drawFeatures();
         
         
@@ -176,23 +216,30 @@ void FaceTracking::draw()
         
         
     }
-    ofPushMatrix();
-    ofTranslate(camW,0);
+    if(ofGetLogLevel()==OF_LOG_VERBOSE)
     {
-        faceBuffer.draw(0,0);
-        
         ofPushMatrix();
-        ofTranslate(0,camH*0.5f);
-        drawFeatures();
-        
+        ofTranslate(camW,0);
+        {
+            faceBuffer[0].draw(0,0);
+            faceBuffer[1].draw(0,faceBuffer[0].getHeight());
+            
+            ofPushMatrix();
+            ofTranslate(0,camH*0.5f);
+            //drawFeatures();
+            
+            ofPopMatrix();
+            
+            drawMarkers(0);
+            ofPushMatrix();
+            ofTranslate(0, BUFFER_SIZE);
+            drawMarkers(1);
+            
+            ofPopMatrix();
+            
+        }
         ofPopMatrix();
-        
-        drawMarkers();
-        
-        
-        
     }
-    ofPopMatrix();
 //    ofPushStyle();
 //    ofSetColor(ofColor::black);
 //    ostringstream os;
@@ -203,22 +250,23 @@ void FaceTracking::draw()
 //    ofDrawBitmapString(os.str(),10,ofGetHeight()-50);
 //    ofPopStyle();
 }
-void FaceTracking::drawFeatures()
+void FaceTracking::drawFeatures(int i)
 {
-    leftEye.drawEffect(alphaMaskShader);
-    rightEye.drawEffect(alphaMaskShader);
-    nose.drawEffect(alphaMaskShader);
-    mouth.drawEffect(alphaMaskShader);
+    leftEye[i].drawEffect(alphaMaskShader);
+    rightEye[i].drawEffect(alphaMaskShader);
+    nose[i].drawEffect(alphaMaskShader);
+    mouth[i].drawEffect(alphaMaskShader);
+    
 }
-void FaceTracking::drawFeaturesBlur()
+void FaceTracking::drawFeaturesBlur(int i)
 {
     ofPushMatrix();
-    ofTranslate(faceRect.x, faceRect.y);
-    ofScale(faceRect.width/BUFFER_SIZE*1.0f, faceRect.height/BUFFER_SIZE*1.0f);
-    leftEye.drawEffect(alphaMaskShader,&blurs[0]);
-    rightEye.drawEffect(alphaMaskShader,&blurs[1]);
-    nose.drawEffect(alphaMaskShader,&blurs[2]);
-    mouth.drawEffect(alphaMaskShader,&blurs[3]);
+    ofTranslate(faceRect[i].x, faceRect[i].y);
+    ofScale(faceRect[i].width/BUFFER_SIZE*1.0f, faceRect[i].height/BUFFER_SIZE*1.0f);
+    leftEye[i].drawEffect(alphaMaskShader,&blurs[0]);
+    rightEye[i].drawEffect(alphaMaskShader,&blurs[1]);
+    nose[i].drawEffect(alphaMaskShader,&blurs[2]);
+    mouth[i].drawEffect(alphaMaskShader,&blurs[3]);
     ofPopMatrix();
     //        blurs[0].begin();
     //        {
@@ -238,55 +286,55 @@ void FaceTracking::drawFeaturesBlur()
     //        }
     //        glPopMatrix();
 }
-void FaceTracking::drawMarkers()
+void FaceTracking::drawMarkers(int i)
 {
+    
     ofPushStyle();
     ofNoFill();
     ofSetColor(ofColor::yellow);
-    leftEye.drawRect();
+    leftEye[i].drawRect();
     
     ofSetColor(ofColor::cyan);
-    rightEye.drawRect();
+    rightEye[i].drawRect();
     ofSetColor(ofColor::blue);
-    nose.drawRect();
+    nose[i].drawRect();
     ofSetColor(ofColor::gray);
-    mouth.drawRect();
+    mouth[i].drawRect();
     ofPopStyle();
 }
 void FaceTracking::processTracking(int x, int y , int w, int h , ofTexture &tex)
 {
     facefinder.findHaarObjects(grayImage,x,y,w,h,minFaceAreaW,minFaceAreaH);
-    if(facefinder.blobs.size()>numPlayer)
+    if(facefinder.blobs.size()<=2 && facefinder.blobs.size()>0)
     {
-        ofRectangle cur = facefinder.blobs[0].boundingRect;
-        faceRect.x = cur.x+faceOffset.x;
-        faceRect.y = cur.y+faceOffset.y;
-        faceRect.width = cur.width+faceOffset.width;
-        faceRect.height = cur.height+faceOffset.height;
-        
-        //        ofRect(faceRect.x, faceRect.y, faceRect.width, faceRect.height);
-        
-        normFace.setTexCoord(0,ofVec2f(faceRect.x, faceRect.y));
-        normFace.setTexCoord(1,ofVec2f(faceRect.x+faceRect.width, faceRect.y));
-        normFace.setTexCoord(2,ofVec2f(faceRect.x+faceRect.width, faceRect.y+faceRect.height));
-        normFace.setTexCoord(3,ofVec2f(faceRect.x, faceRect.y+faceRect.height));
-        
-        
-        
-        faceBuffer.begin();	
-        tex.bind();
-        normFace.draw();
-        tex.unbind();
-        faceBuffer.end();
-        
-        faceBuffer.readToPixels(facePixels);
-        colorImgFace.setFromPixels(facePixels.getPixels(),BUFFER_SIZE,BUFFER_SIZE);
-        grayImageFace = colorImgFace;
-        
-        leftEye.update(grayImageFace,faceBuffer.getTextureReference());
-        rightEye.update(grayImageFace,faceBuffer.getTextureReference());
-        nose.update(grayImageFace,faceBuffer.getTextureReference());
-        mouth.update(grayImageFace,faceBuffer.getTextureReference());
+        for(int i = 0 ; i  < facefinder.blobs.size() ; i++)
+        {
+            ofRectangle cur = facefinder.blobs[i].boundingRect;
+            faceRect[i].x = cur.x+faceOffset.x;
+            faceRect[i].y = cur.y+faceOffset.y;
+            faceRect[i].width = cur.width+faceOffset.width;
+            faceRect[i].height = cur.height+faceOffset.height;
+            
+            normFace[i].setTexCoord(0,ofVec2f(faceRect[i].x, faceRect[i].y));
+            normFace[i].setTexCoord(1,ofVec2f(faceRect[i].x+faceRect[i].width, faceRect[i].y));
+            normFace[i].setTexCoord(2,ofVec2f(faceRect[i].x+faceRect[i].width, faceRect[i].y+faceRect[i].height));
+            normFace[i].setTexCoord(3,ofVec2f(faceRect[i].x, faceRect[i].y+faceRect[i].height));
+            
+            faceBuffer[i].begin();	
+            tex.bind();
+            normFace[i].draw();
+            tex.unbind();
+            faceBuffer[i].end();
+            
+            faceBuffer[i].readToPixels(facePixels[i]);
+            colorImgFace.setFromPixels(facePixels[i].getPixels(),BUFFER_SIZE,BUFFER_SIZE);
+            grayImageFace = colorImgFace;
+            
+            leftEye[i].update(grayImageFace,faceBuffer[i].getTextureReference());
+            rightEye[i].update(grayImageFace,faceBuffer[i].getTextureReference());
+            nose[i].update(grayImageFace,faceBuffer[i].getTextureReference());
+            mouth[i].update(grayImageFace,faceBuffer[i].getTextureReference());
+        }
         
     }
 }
