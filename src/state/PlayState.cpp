@@ -44,7 +44,7 @@ void PlayState::setup(){
     
     // enable depth->video image calibration
     faceTracking.setup();
-        getSharedData().panel.setWhichPanel("FaceTracking");
+    getSharedData().panel.setWhichPanel("FaceTracking");
     getSharedData().panel.setWhichColumn(0);
     getSharedData().panel.addSlider("minFaceAreaW",faceTracking.minFaceAreaW,1,512);
 	getSharedData().panel.addSlider("minFaceAreaH",faceTracking.minFaceAreaH,1,512);
@@ -61,19 +61,19 @@ void PlayState::setup(){
     {
         getSharedData().panel.setWhichColumn(i+1) ;
         getSharedData().panel.addSlider(feature[i]->name+"minFeatureArea",feature[i]->minArea,1,BUFFER_SIZE);
-    
+        
         getSharedData().panel.addSlider(feature[i]->name+"ROIL_X",feature[i]->ROI.x,1,BUFFER_SIZE);
         getSharedData().panel.addSlider(feature[i]->name+"ROIL_W",feature[i]->ROI.width,1,BUFFER_SIZE);
         getSharedData().panel.addSlider(feature[i]->name+"ROIL_Y",feature[i]->ROI.y,1,BUFFER_SIZE);
         getSharedData().panel.addSlider(feature[i]->name+"ROIL_H",feature[i]->ROI.height,1,BUFFER_SIZE);
-    
-    //gui.addPage("OffSet");
+        
+        //gui.addPage("OffSet");
         getSharedData().panel.addSlider( feature[i]->name+"offset.x",feature[i]->offset.x,-BUFFER_SIZE,BUFFER_SIZE);
         getSharedData().panel.addSlider( feature[i]->name+"offset.y",feature[i]->offset.y,-BUFFER_SIZE,BUFFER_SIZE);
         getSharedData().panel.addSlider(feature[i]->name+ "offset.width",feature[i]->offset.width,-BUFFER_SIZE,BUFFER_SIZE);
         getSharedData().panel.addSlider(feature[i]->name+ "offset.height",feature[i]->offset.height,-BUFFER_SIZE,BUFFER_SIZE);
     }
-
+    
     box2d.setup();
     bCapture = false;
     bBox2D = false;
@@ -83,27 +83,27 @@ void PlayState::setup(){
 void PlayState::update(){
     if(!bBox2D)
     {
-    faceTracking.minFaceAreaW = getSharedData().panel.getValueF("minFaceAreaW");
-    faceTracking.minFaceAreaH = getSharedData().panel.getValueF("minFaceAreaH");
-    faceTracking.faceOffset.x = getSharedData().panel.getValueF("faceOffsetX");
-    faceTracking.faceOffset.y = getSharedData().panel.getValueF("faceOffsetY");
-    faceTracking.faceOffset.width = getSharedData().panel.getValueF("faceOffsetW");
-    faceTracking.faceOffset.height = getSharedData().panel.getValueF("faceOffsetH");
-    for(int i = 0 ; i < 4 ; i++)
-    {
-        feature[i]->minArea = getSharedData().panel.getValueF(feature[i]->name+"minFeatureArea");
-        feature[i]->ROI.x = getSharedData().panel.getValueF(feature[i]->name+"ROIL_X");
-        feature[i]->ROI.width = getSharedData().panel.getValueF(feature[i]->name+"ROIL_W");
-        feature[i]->ROI.y = getSharedData().panel.getValueF(feature[i]->name+"ROIL_Y");
-        feature[i]->ROI.height = getSharedData().panel.getValueF(feature[i]->name+"ROIL_H");
-        feature[i]->offset.x = getSharedData().panel.getValueF(feature[i]->name+"offset.x");
-        feature[i]->offset.y = getSharedData().panel.getValueF(feature[i]->name+"offset.y");
-        feature[i]->offset.width = getSharedData().panel.getValueF(feature[i]->name+"offset.width");
-        feature[i]->offset.height = getSharedData().panel.getValueF(feature[i]->name+"offset.height");
-    
-    }
-    faceTracking.numPlayer = getSharedData().numPlayer;
-	faceTracking.update();
+        faceTracking.minFaceAreaW = getSharedData().panel.getValueF("minFaceAreaW");
+        faceTracking.minFaceAreaH = getSharedData().panel.getValueF("minFaceAreaH");
+        faceTracking.faceOffset.x = getSharedData().panel.getValueF("faceOffsetX");
+        faceTracking.faceOffset.y = getSharedData().panel.getValueF("faceOffsetY");
+        faceTracking.faceOffset.width = getSharedData().panel.getValueF("faceOffsetW");
+        faceTracking.faceOffset.height = getSharedData().panel.getValueF("faceOffsetH");
+        for(int i = 0 ; i < 4 ; i++)
+        {
+            feature[i]->minArea = getSharedData().panel.getValueF(feature[i]->name+"minFeatureArea");
+            feature[i]->ROI.x = getSharedData().panel.getValueF(feature[i]->name+"ROIL_X");
+            feature[i]->ROI.width = getSharedData().panel.getValueF(feature[i]->name+"ROIL_W");
+            feature[i]->ROI.y = getSharedData().panel.getValueF(feature[i]->name+"ROIL_Y");
+            feature[i]->ROI.height = getSharedData().panel.getValueF(feature[i]->name+"ROIL_H");
+            feature[i]->offset.x = getSharedData().panel.getValueF(feature[i]->name+"offset.x");
+            feature[i]->offset.y = getSharedData().panel.getValueF(feature[i]->name+"offset.y");
+            feature[i]->offset.width = getSharedData().panel.getValueF(feature[i]->name+"offset.width");
+            feature[i]->offset.height = getSharedData().panel.getValueF(feature[i]->name+"offset.height");
+            
+        }
+        faceTracking.numPlayer = getSharedData().numPlayer;
+        faceTracking.update();
     }
     else box2d.update();
 }
@@ -114,9 +114,13 @@ void PlayState::draw(){
     
     faceTracking.draw();
     
-    faceTracking.drawFeatures();
+    //faceTracking.drawFeatures();
     
-    if(bBox2D)box2d.draw();
+    if(bBox2D)
+    {
+        faceTracking.drawFeaturesBlur();
+        box2d.draw();
+    }
     if(bCapture)
     {
         bCapture = false;
@@ -193,20 +197,29 @@ void PlayState::mousePressed(int x, int y, int button){
     bBox2D = !bBox2D;
     if(bBox2D)
     {
-        if(faceTracking.facefinder.blobs.size()>0)
+        if(getSharedData().panel.hidden)
         {
-    CustomParticle p;
-    	p.setPhysics(1.0, 0.5, 0.3);
-        ofSetRectMode(OF_RECTMODE_CORNER);
-        float scaleX = faceTracking.faceRect.width/BUFFER_SIZE*1.0f;
-        float scaleY = faceTracking.faceRect.width/BUFFER_SIZE*1.0f;
-            float x = (faceTracking.faceRect.x+faceTracking.leftEye.rect.x)*scaleX;
-            float y = (faceTracking.faceRect.y+faceTracking.leftEye.rect.y)*scaleY;
-            float w = faceTracking.leftEye.rect.width*scaleX;
-            float h = faceTracking.leftEye.rect.height*scaleY;
-    p.setup(box2d.box2d.getWorld(),x,y,w,h);
-    	p.setupTheCustomData(&faceTracking.leftEye,&faceTracking.alphaMaskShader,scaleX,scaleY);
-        box2d.addParticle( p);
+            if(faceTracking.facefinder.blobs.size()>0)
+            {
+                
+                for(int i = 0 ; i < 4 ; i++)
+                {
+                CustomParticle p;
+                p.setPhysics(1.0, 0.5, 0.3);
+                ofSetRectMode(OF_RECTMODE_CORNER);
+                float scaleX = faceTracking.faceRect.width/BUFFER_SIZE*1.0f;
+                float scaleY = faceTracking.faceRect.height/BUFFER_SIZE*1.0f;
+                float x = faceTracking.faceRect.x+(faceTracking.feature[i]->rect.x*scaleX);
+                float y = faceTracking.faceRect.y+(faceTracking.feature[i]->rect.y*scaleY);
+                float w = faceTracking.feature[i]->rect.width*scaleX;
+                float h = faceTracking.feature[i]->rect.height*scaleY;
+                p.setup(box2d.box2d.getWorld(),x+w*0.5,y+h*0.5,w*0.5*0.5);//,h*0.5);
+                p.setupTheCustomData(faceTracking.feature[i],&faceTracking.alphaMaskShader,scaleX,scaleY);
+                box2d.addParticle( p);
+                }
+                
+                
+            }
         }
     }
     

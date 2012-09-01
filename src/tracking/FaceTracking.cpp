@@ -97,7 +97,10 @@ void FaceTracking::setup()
     nose.setup("nose","haarcascade_mcs_nose.xml","noseMask.png",48,64);
     mouth.setup("mouth","haarcascade_mcs_mouth.xml","mouthMask.png",64,48);
     
-   
+   feature[0] = &leftEye;
+    feature[1] = &rightEye;
+    feature[2] = &nose;
+    feature[3] = &mouth;
     
     // There are 3 of ways of loading a shader:
     //
@@ -168,7 +171,7 @@ void FaceTracking::draw()
         
         
         
-        drawFeaturesBlur();
+        
         //drawFeatures();
         
         
@@ -176,6 +179,8 @@ void FaceTracking::draw()
         
         
     }
+    if(ofGetLogLevel()==OF_LOG_VERBOSE)
+    {
     ofPushMatrix();
     ofTranslate(camW,0);
     {
@@ -193,6 +198,7 @@ void FaceTracking::draw()
         
     }
     ofPopMatrix();
+    }
 //    ofPushStyle();
 //    ofSetColor(ofColor::black);
 //    ostringstream os;
