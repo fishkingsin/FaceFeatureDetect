@@ -242,7 +242,7 @@
     <val_0>59.7333</val_0>
 </mouthoffset.height0>
 <lefteyeminFeatureArea1>
-    <val_0>32.1667</val_0>
+    <val_0>35</val_0>
 </lefteyeminFeatureArea1>
 <lefteyeROIL_X1>
     <val_0>1</val_0>
@@ -269,7 +269,7 @@
     <val_0>19.9111</val_0>
 </lefteyeoffset.height1>
 <righteyeminFeatureArea1>
-    <val_0>131.333</val_0>
+    <val_0>60.5</val_0>
 </righteyeminFeatureArea1>
 <righteyeROIL_X1>
     <val_0>129.917</val_0>
@@ -349,3 +349,6 @@
 <mouthoffset.height1>
     <val_0>48.3556</val_0>
 </mouthoffset.height1>
+<LogLevel>
+    <val_0>0</val_0>
+</LogLevel>

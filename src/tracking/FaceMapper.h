@@ -85,7 +85,7 @@ public:
 
                 xml.popTag();
             }
-            save();
+            //save();
         }
 
     }
@@ -131,21 +131,28 @@ public:
         faceImage2.clear();
         FaceData::setup(img_fn, setting_fn);
         faceImage2.loadImage(img_fn2);
+        warpper2.setup(0,0,faceImage2.width,faceImage2.height);
         warpper2.load("warpper2_"+prefix+".xml");
+        
     }
     void draw()
     {
         ofEnableAlphaBlending();
         backgroundImage.draw(0,0);
+        
+        ofPushMatrix();
         warpper.begin();
         faceImage.draw(0,0);
         warpper.end();
         warpper.draw();
+        ofPopMatrix();
         
+        ofPushMatrix();
         warpper2.begin();
         faceImage2.draw(0,0);
         warpper2.end();
         warpper2.draw();
+        ofPopMatrix();
         
         overlayImage.draw(0,0);
         

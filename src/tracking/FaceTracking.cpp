@@ -192,6 +192,21 @@ void FaceTracking::draw()
 #else
         vidGrabber.draw(0,0);
 #endif
+                
+        
+//        ofPushMatrix();
+//        drawFeaturesBlur(0);
+//        drawFeaturesBlur(1);
+//        ofPopMatrix();
+        //drawFeatures();
+        
+        
+        
+        
+        
+    }
+    if(ofGetLogLevel()==OF_LOG_VERBOSE)
+    {
         ofPushMatrix();
         ofPushStyle();
         ofNoFill();
@@ -203,21 +218,7 @@ void FaceTracking::draw()
         }
         ofPopStyle();
         ofPopMatrix();
-        
-        
-        ofPushMatrix();
-        drawFeaturesBlur(0);
-        drawFeaturesBlur(1);
-        ofPopMatrix();
-        //drawFeatures();
-        
-        
-        
-        
-        
-    }
-    if(ofGetLogLevel()==OF_LOG_VERBOSE)
-    {
+
         ofPushMatrix();
         ofTranslate(camW,0);
         {

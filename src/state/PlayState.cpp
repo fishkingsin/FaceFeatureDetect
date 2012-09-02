@@ -125,10 +125,14 @@ void PlayState::draw(){
     
     faceTracking.draw();
     
-    //    faceTracking.drawFeatures(0);
-    //    faceTracking.drawFeatures(1);
+
     
-    if(bBox2D)box2d.draw();
+    if(bBox2D)
+    {
+        faceTracking.drawFeaturesBlur(0);
+        faceTracking.drawFeaturesBlur(1);
+        box2d.draw();
+    }
     if(bCapture)
     {
         bCapture = false;
@@ -187,31 +191,34 @@ void PlayState::keyPressed(int key){
             
             if(bBox2D)
             {
-                if(faceTracking.facefinder.blobs.size()<2)
+                if(faceTracking.facefinder.blobs.size()<=2)
                 {
-                    for(int j = 0 ;j < 2 ; j++)
+                    
+                        
+                    for(int i = 0 ; i < faceTracking.facefinder.blobs.size() ;i++)
                     {
-                        feature[0] = &faceTracking.leftEye[j];
-                        feature[1] = &faceTracking.rightEye[j];
-                        feature[2] = &faceTracking.nose[j];
-                        feature[3] = &faceTracking.mouth[j];
-                        for(int i = 0 ; i < faceTracking.facefinder.blobs.size() ;i++)
+                        feature[0] = &faceTracking.leftEye[i];
+                        feature[1] = &faceTracking.rightEye[i];
+                        feature[2] = &faceTracking.nose[i];
+                        feature[3] = &faceTracking.mouth[i];
+                        ofRectangle rect =  faceTracking.faceRect[i];
+                        for(int j = 0 ; j < 4 ; j++)
                         {
                             CustomParticle p;
                             p.setPhysics(1.0, 0.5, 0.3);
-                            ofSetRectMode(OF_RECTMODE_CORNER);
-                            ofRectangle rect =  faceTracking.faceRect[i];
+                            
                             float scaleX = rect.width/BUFFER_SIZE*1.0f;
-                            float scaleY = rect.width/BUFFER_SIZE*1.0f;
-                            float x = (rect.x+faceTracking.leftEye[i].rect.x)*scaleX;
-                            float y = (rect.y+faceTracking.leftEye[i].rect.y)*scaleY;
-                            float w = faceTracking.leftEye[i].rect.width*scaleX;
-                            float h = faceTracking.leftEye[i].rect.height*scaleY;
-                            p.setup(box2d.box2d.getWorld(),x,y,w,h);
-                            p.setupTheCustomData(&faceTracking.leftEye[i],&faceTracking.alphaMaskShader,scaleX,scaleY);
+                            float scaleY = rect.height/BUFFER_SIZE*1.0f;
+                            float x = (rect.x+feature[j]->rect.x)*scaleX;
+                            float y = (rect.y+feature[j]->rect.y)*scaleY;
+                            float w = feature[j]->rect.width*scaleX;
+                            float h = feature[j]->rect.height*scaleY;
+                            p.setup(box2d.box2d.getWorld(),x+w*0.5,y+h*0.5,w*0.5*0.5);
+                            p.setupTheCustomData(feature[j],&faceTracking.alphaMaskShader,scaleX,scaleY);
                             box2d.addParticle( p);
                         }
                     }
+                    
                 }
             }
         }

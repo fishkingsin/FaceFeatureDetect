@@ -41,7 +41,7 @@ struct DataSet
     float scaleX,scaleY;
 };
 // A Custom Particle extedning the box2d circle
-class CustomParticle : public ofxBox2dRect {
+class CustomParticle : public ofxBox2dCircle {
 	
 public:
 	
@@ -68,8 +68,8 @@ public:
 			// you would use this when using a contact listener
 			// or tapping into box2d's solver.
 			
-			float _width = getWidth();
-			float _height = getHeight();
+			float _width = getRadius();//getWidth();
+//			float _height = getHeight();
 			ofPushMatrix();
 			ofTranslate(getPosition());
 			ofRotateZ(getRotation());
@@ -88,14 +88,15 @@ public:
             glScalef(theData->scaleX,theData->scaleY,1);
             {
 //                feature->draw(0,0,feature->rect.width,feature->rect.height);
-                feature->draw(0,0,feature->rect.width,feature->rect.height);
+                feature->draw(-feature->rect.width*0.5,-feature->rect.height*0.5,feature->rect.width,feature->rect.height);
             }
             glPopMatrix();
             shader->end();
 			
             ofPopMatrix();
+            if(ofGetLogLevel()==OF_LOG_VERBOSE)ofxBox2dCircle::draw();
 		}
-        ofxBox2dRect::draw();
+        
 	}
     
     

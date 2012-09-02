@@ -34,7 +34,7 @@
 #define FaceFeatureDetect_FaceTracking_h
 #include "ofxCvHaarFinder.h"
 #define _USE_LIVE_VIDEO		// uncomment this to use a live camera
-#define _USE_IMAGE		// uncomment this to use a live camera
+//#define _USE_IMAGE		// uncomment this to use a live camera
 
 //#define USE_QTKIT
 #ifdef USE_QTKIT
