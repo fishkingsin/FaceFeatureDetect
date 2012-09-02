@@ -52,7 +52,7 @@ void PlayState::setup(){
     getSharedData().panel.addSlider("faceOffsetY",faceTracking.faceOffset.y,1,512);
     getSharedData().panel.addSlider("faceOffsetW",faceTracking.faceOffset.width,1,512);
     getSharedData().panel.addSlider("faceOffsetH",faceTracking.faceOffset.height,1,512);
-    for(int j = 0 ;j < 2 ; j++)
+    for(int j = 0 ;j < NUM_PLAYER ; j++)
     {
         getSharedData().panel.setWhichPanel("FaceTracking"+ofToString(j));
         feature[0] = &faceTracking.leftEye[j];
@@ -92,7 +92,7 @@ void PlayState::update(){
         faceTracking.faceOffset.y = getSharedData().panel.getValueF("faceOffsetY");
         faceTracking.faceOffset.width = getSharedData().panel.getValueF("faceOffsetW");
         faceTracking.faceOffset.height = getSharedData().panel.getValueF("faceOffsetH");
-        for(int j = 0 ;j < 2 ; j++)
+        for(int j = 0 ;j < NUM_PLAYER ; j++)
         {
 
             feature[0] = &faceTracking.leftEye[j];
@@ -191,7 +191,7 @@ void PlayState::keyPressed(int key){
             
             if(bBox2D)
             {
-                if(faceTracking.facefinder.blobs.size()<=2)
+//                if(faceTracking.facefinder.blobs.size()<=2)
                 {
                     
                         

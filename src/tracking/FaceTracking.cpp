@@ -76,7 +76,7 @@ void FaceTracking::setup()
         blurs[i].setScale(4);
         blurs[i].setRotation(0);
     }
-    for(int i = 0 ; i  < 2 ; i++)
+    for(int i = 0 ; i  < NUM_PLAYER ; i++)
     {
         faceBuffer[i].allocate(BUFFER_SIZE,BUFFER_SIZE,GL_RGB);
         facePixels[i].allocate(faceBuffer[i].getWidth(),faceBuffer[i].getHeight(),OF_IMAGE_COLOR);
@@ -306,7 +306,7 @@ void FaceTracking::drawMarkers(int i)
 void FaceTracking::processTracking(int x, int y , int w, int h , ofTexture &tex)
 {
     facefinder.findHaarObjects(grayImage,x,y,w,h,minFaceAreaW,minFaceAreaH);
-    if(facefinder.blobs.size()<=2 && facefinder.blobs.size()>0)
+///    if(facefinder.blobs.size()<=2 && facefinder.blobs.size()>0)
     {
         for(int i = 0 ; i  < facefinder.blobs.size() ; i++)
         {

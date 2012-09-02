@@ -49,6 +49,30 @@
 #define camH 480
 #define BUFFER_SIZE 256
 #define QUARTER_SIZE 0.25
+#define NUM_PLAYER 2
+class FeatureData
+{
+public:
+    FeatureData()
+    {
+        
+    }
+    FeatureData(const FeatureData & mom)
+    {
+        
+    }
+    void  operator = ( FeatureData &data )
+    {
+
+        buffer = data.buffer;
+        mask = data.mask;
+        rect = data.rect;
+    }
+    ofFbo buffer;    
+    ofFbo mask;
+    ofRectangle rect;
+    
+};
 class FaceFeature
 {
 public:
@@ -91,6 +115,7 @@ public:
         maskImage.draw(0,0);
         mask.end();
     }
+    
     void update(ofxCvGrayscaleImage &grayImage, ofTexture &tex)
     {
         if(finder.findHaarObjects(grayImage,ROI,minArea,minArea)>0)
@@ -130,6 +155,16 @@ public:
             buffer.end();
         }
         
+        //*feature.buffer = *buffer; 
+        
+    }
+    FeatureData & getFeatureData()
+    {
+        FeatureData &feature = _feature;
+        feature.buffer = buffer;
+        feature.mask = mask;
+        feature.rect = rect;
+        return feature;
     }
     void draw()
     {
