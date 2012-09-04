@@ -34,7 +34,7 @@
 
 #include "ofxState.h"
 #include "SharedData.h"
-
+#include "CountDown.h"
 class PlayState : public Apex::ofxState<SharedData>
 {
 public:
@@ -48,14 +48,13 @@ public:
     void stateExit();
     void keyPressed(int key) ;
     void keyReleased(int key) ;
-
+    void Shot(ofEventArgs &arg);
+    void completeShot(ofEventArgs &arg);
 	string getName();
     MyBox2D box2d;
     FaceTracking faceTracking;
-    
     bool bBox2D;
-    
-    
     bool bCapture;
-
+    CountDown countDown;
+    ofImage lastCapture;
 };

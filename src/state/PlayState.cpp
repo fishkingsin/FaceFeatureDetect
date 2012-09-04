@@ -80,6 +80,9 @@ void PlayState::setup(){
     box2d.setup();
     bCapture = false;
     bBox2D = false;
+    countDown.setup(getSharedData().xml.getValue("SETTING::COUNTDOWN",1)*1000);
+    ofAddListener(countDown.COUNTER_REACHED,this,&PlayState::Shot);
+    ofAddListener(countDown.COMPLETE,this,&PlayState::completeShot);
 }
 
 //--------------------------------------------------------------
@@ -123,18 +126,21 @@ void PlayState::update(){
 //--------------------------------------------------------------
 void PlayState::draw(){
     
-    faceTracking.draw();
-    
-
-    
-    if(bBox2D)
+    if(!bBox2D)
     {
+        faceTracking.draw();
+    }
+    else
+    {
+        lastCapture.draw(0,0);
+        
         faceTracking.drawFeaturesBlur(0);
         faceTracking.drawFeaturesBlur(1);
         box2d.draw();
     }
     if(bCapture)
     {
+        
         bCapture = false;
         
         char imagename[1024];
@@ -171,7 +177,9 @@ void PlayState::draw(){
             //TO_DO load image and map the face on shoes;
             getSharedData().lastFileNames.pop_back();
         }
+        
     }
+    countDown.draw(ofGetWidth()/2 -100,ofGetHeight()/2 -100, 200,200);
 }
 
 void PlayState::stateExit() {
@@ -193,8 +201,6 @@ void PlayState::keyPressed(int key){
             {
 //                if(faceTracking.facefinder.blobs.size()<=2)
                 {
-                    
-                        
                     for(int i = 0 ; i < faceTracking.facefinder.blobs.size() ;i++)
                     {
                         feature[0] = &faceTracking.leftEye[i];
@@ -205,7 +211,8 @@ void PlayState::keyPressed(int key){
                         for(int j = 0 ; j < 4 ; j++)
                         {
                             CustomParticle p;
-                            p.setPhysics(1.0, 0.5, 0.3);
+                            //float density, float bounce, float friction
+                            p.setPhysics(1.0, 0.7, 0.7);
                             
                             float scaleX = rect.width/BUFFER_SIZE*1.0f;
                             float scaleY = rect.height/BUFFER_SIZE*1.0f;
@@ -224,7 +231,11 @@ void PlayState::keyPressed(int key){
         }
             break;
         case OF_KEY_RETURN:
-            bBox2D = !bBox2D;
+            //bBox2D = !bBox2D;
+            countDown.start();
+            break;
+        case OF_KEY_BACKSPACE:
+            bBox2D = false;
             break;
     }
 }
@@ -255,3 +266,16 @@ void PlayState::mouseReleased(int x, int y, int button){
     
 }
 
+void PlayState::Shot(ofEventArgs &arg)
+{
+    ofLog(OF_LOG_VERBOSE,"Shot");
+    bCapture = true;
+    
+}
+void PlayState::completeShot(ofEventArgs &arg)
+{
+    ofLog(OF_LOG_VERBOSE,"completeShot");
+    bBox2D = true;
+    keyPressed('b');
+    
+}

@@ -158,14 +158,15 @@ public:
         //*feature.buffer = *buffer; 
         
     }
-    FeatureData & getFeatureData()
-    {
-        FeatureData &feature = _feature;
-        feature.buffer = buffer;
-        feature.mask = mask;
-        feature.rect = rect;
-        return feature;
-    }
+    //not yet finish
+//    FeatureData & getFeatureData()
+//    {
+//        FeatureData &feature = _feature;
+//        feature.buffer = buffer;
+//        feature.mask = mask;
+//        feature.rect = rect;
+//        return feature;
+//    }
     void draw()
     {
         buffer.draw(rect.x,rect.y,rect.width,rect.height);

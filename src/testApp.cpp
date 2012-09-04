@@ -13,7 +13,7 @@ void testApp::setup(){
         {
             xml.addValue("COUNTER", stateMachine.getSharedData().counter);
             xml.addValue("PATH", "./captures");
-            xml.addValue("DIGI", 5);
+            xml.addValue("DIGI", 6);
             xml.popTag();
         }
         xml.saveFile(settingFileName);
@@ -38,7 +38,7 @@ void testApp::setup(){
     ofxControlPanel::setBackgroundColor(simpleColor(30, 30, 60, 100));
 	ofxControlPanel::setTextColor(simpleColor(240, 50, 50, 255));
     stateMachine.getSharedData().panel.setup(ofGetWidth(),ofGetHeight());
-	stateMachine.getSharedData().panel.loadFont("MONACO.TTF", 12);		
+	stateMachine.getSharedData().panel.loadFont("MONACO.TTF", 8);		
 	stateMachine.getSharedData().panel.addPanel("General", 4,false);
     
 	ofxControlPanel::setBackgroundColor(simpleColor(60, 30, 30, 100));	
@@ -94,13 +94,13 @@ void testApp::draw(){
 }
 void testApp::exit()
 {
-    if (stateMachine.getSharedData().xml.pushTag("DATA")) {
-        stateMachine.getSharedData().xml.setValue("COUNTER", stateMachine.getSharedData().counter);
-        stateMachine.getSharedData().xml.popTag();
-        
-        
-    }
-    stateMachine.getSharedData().xml.saveFile();
+//    if (stateMachine.getSharedData().xml.pushTag("DATA")) {
+//        stateMachine.getSharedData().xml.setValue("COUNTER", stateMachine.getSharedData().counter);
+//        stateMachine.getSharedData().xml.popTag();
+//        
+//        
+//    }
+//    stateMachine.getSharedData().xml.saveFile();
 }
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){

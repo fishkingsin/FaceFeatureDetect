@@ -111,6 +111,7 @@ public:
     void addParticle(CustomParticle &p);
     ofxBox2d box2d;
     vector <CustomParticle>		particles;
+    void clear(){};
 };
 
 
