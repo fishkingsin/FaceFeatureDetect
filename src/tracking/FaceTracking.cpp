@@ -134,23 +134,24 @@ void FaceTracking::setup()
     numPlayer = 0;
     
 }
-void FaceTracking::update()
+void FaceTracking::update(bool bTrack)
 {
-    bool bNewFrame = false;
+    //bool bNewFrame = false;
     
     {
 #ifdef _USE_IMAGE
-        bNewFrame = true;
+       // bNewFrame = true;
 #else
 #ifdef _USE_LIVE_VIDEO
         vidGrabber.update();
-        bNewFrame = vidGrabber.isFrameNew();
+        //bNewFrame = vidGrabber.isFrameNew();
 #else
         vidPlayer.idleMovie();
-        bNewFrame = vidPlayer.isFrameNew();
+        //bNewFrame = vidPlayer.isFrameNew();
 #endif
 #endif  
-        if (bNewFrame){
+        if (bTrack)
+        {
 #ifdef _USE_IMAGE
 
             colorImg.setFromPixels(faces.getPixels(), camW,camH);
@@ -302,6 +303,10 @@ void FaceTracking::drawMarkers(int i)
     ofSetColor(ofColor::gray);
     mouth[i].drawRect();
     ofPopStyle();
+}
+void FaceTracking::clear()
+{
+
 }
 void FaceTracking::processTracking(int x, int y , int w, int h , ofTexture &tex)
 {

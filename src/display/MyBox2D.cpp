@@ -37,7 +37,7 @@ void MyBox2D::setup()
     
 
 	box2d.init();
-	box2d.setGravity(0, 2);
+	box2d.setGravity(0, 1);
     box2d.createBounds(0,0,camW,camH);
 //	box2d.createGround();
 	box2d.setFPS(30);

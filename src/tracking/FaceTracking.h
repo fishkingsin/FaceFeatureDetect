@@ -241,7 +241,7 @@ class FaceTracking
 {
 public:
     void setup();
-    void update();
+    void update(bool bTrack = false);
     void draw();
     void exit();
     void processTracking(int x, int y , int w, int h , ofTexture& tex);
@@ -250,6 +250,23 @@ public:
     void drawFeatures(int i);
     void drawFeaturesBlur(int i);
     void drawMarkers(int i);
+    void clear();
+    unsigned char* getPixels()
+    {
+#ifdef _USE_IMAGE
+        return faces.getPixels();
+#else
+#ifdef _USE_LIVE_VIDEO
+#ifdef USE_QTKIT
+        return vidGrabber.getPixels();
+#else
+        return vidGrabber.getPixels();
+#endif
+#else
+        return vidPlayer.getPixels();
+#endif
+#endif 
+    }
 #ifdef _USE_IMAGE
     ofImage faces;
 #else
