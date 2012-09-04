@@ -63,7 +63,7 @@ public:
     }
     void  operator = ( FeatureData &data )
     {
-
+		
         buffer = data.buffer;
         mask = data.mask;
         rect = data.rect;
@@ -101,7 +101,7 @@ public:
         
         
         name = feature_name;
-                
+		
         ofEnableArbTex();
         ofImage maskImage;
         
@@ -144,7 +144,7 @@ public:
         }
         else
         {
-                        
+			
             buffer.begin();	
             ofClear(0, 0, 0, 0);
             
@@ -159,14 +159,14 @@ public:
         
     }
     //not yet finish
-//    FeatureData & getFeatureData()
-//    {
-//        FeatureData &feature = _feature;
-//        feature.buffer = buffer;
-//        feature.mask = mask;
-//        feature.rect = rect;
-//        return feature;
-//    }
+	//    FeatureData & getFeatureData()
+	//    {
+	//        FeatureData &feature = _feature;
+	//        feature.buffer = buffer;
+	//        feature.mask = mask;
+	//        feature.rect = rect;
+	//        return feature;
+	//    }
     void draw()
     {
         buffer.draw(rect.x,rect.y,rect.width,rect.height);
@@ -217,7 +217,7 @@ public:
             glPushMatrix();
             //glTranslatef(rect.x,rect.y,0);
             //glTranslatef(rect.x,rect.y,0);
-//            glScalef(scale,scale,1);
+			//            glScalef(scale,scale,1);
             {
                 draw(0,0,rect.width,rect.height);
             }
@@ -289,7 +289,7 @@ public:
     
     ofxCvGrayscaleImage 	grayImage;
     ofxCvGrayscaleImage 	grayImageFace;
-
+	
     ofFbo faceBuffer[2];
     ofMesh normFace[2];
     ofPixels facePixels[2];
@@ -307,8 +307,8 @@ public:
     ofShader alphaMaskShader;
     
     int minArea ,
-     minFaceAreaW ,
-     minFaceAreaH ;
+	minFaceAreaW ,
+	minFaceAreaH ;
     int numPlayer;
 };
 

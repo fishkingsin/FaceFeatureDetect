@@ -92,18 +92,18 @@ void FaceTracking::setup()
         normFace[i].addTexCoord(0);
         normFace[i].addTexCoord(0);
         normFace[i].setMode(OF_PRIMITIVE_TRIANGLE_FAN);
-    
-	
-	
-    
-    
-    
-    leftEye[i].setup("lefteye","haarcascade_mcs_lefteye.xml","leftEyeMask.png",64,48);
-    rightEye[i].setup("righteye","haarcascade_mcs_righteye.xml","rightEyeMask.png",64,48);
-    nose[i].setup("nose","haarcascade_mcs_nose.xml","noseMask.png",48,64);
-    mouth[i].setup("mouth","haarcascade_mcs_mouth.xml","mouthMask.png",64,48);
+		
+		
+		
+		
+		
+		
+		leftEye[i].setup("lefteye","haarcascade_mcs_lefteye.xml","leftEyeMask.png",64,48);
+		rightEye[i].setup("righteye","haarcascade_mcs_righteye.xml","rightEyeMask.png",64,48);
+		nose[i].setup("nose","haarcascade_mcs_nose.xml","noseMask.png",48,64);
+		mouth[i].setup("mouth","haarcascade_mcs_mouth.xml","mouthMask.png",64,48);
     }
-   
+	
     
     // There are 3 of ways of loading a shader:
     //
@@ -140,7 +140,7 @@ void FaceTracking::update(bool bTrack)
     
     {
 #ifdef _USE_IMAGE
-       // bNewFrame = true;
+		// bNewFrame = true;
 #else
 #ifdef _USE_LIVE_VIDEO
         vidGrabber.update();
@@ -153,9 +153,9 @@ void FaceTracking::update(bool bTrack)
         if (bTrack)
         {
 #ifdef _USE_IMAGE
-
+			
             colorImg.setFromPixels(faces.getPixels(), camW,camH);
-
+			
             grayImage = colorImg;
             
             processTracking(0,0,camW,camH,faces.getTextureReference());
@@ -165,7 +165,7 @@ void FaceTracking::update(bool bTrack)
 #else
             colorImg.setFromPixels(vidPlayer.getPixels(), camW,camH);
 #endif
-    
+			
             grayImage = colorImg;
             
             processTracking(0,0,camW,camH,vidGrabber.getTextureReference());
@@ -193,12 +193,12 @@ void FaceTracking::draw()
 #else
         vidGrabber.draw(0,0);
 #endif
-                
+		
         
-//        ofPushMatrix();
-//        drawFeaturesBlur(0);
-//        drawFeaturesBlur(1);
-//        ofPopMatrix();
+		//        ofPushMatrix();
+		//        drawFeaturesBlur(0);
+		//        drawFeaturesBlur(1);
+		//        ofPopMatrix();
         //drawFeatures();
         
         
@@ -219,7 +219,7 @@ void FaceTracking::draw()
         }
         ofPopStyle();
         ofPopMatrix();
-
+		
         ofPushMatrix();
         ofTranslate(camW,0);
         {
@@ -242,15 +242,15 @@ void FaceTracking::draw()
         }
         ofPopMatrix();
     }
-//    ofPushStyle();
-//    ofSetColor(ofColor::black);
-//    ostringstream os;
-//    os <<"minArea : "+ofToString(minArea) <<endl ;
-//    if(facefinder.blobs.size()>0) os << "face detect OK"<<endl;
-//    else os << "no face detected"<<endl;
-//    os << "spacebar toggle gui" <<endl;
-//    ofDrawBitmapString(os.str(),10,ofGetHeight()-50);
-//    ofPopStyle();
+	//    ofPushStyle();
+	//    ofSetColor(ofColor::black);
+	//    ostringstream os;
+	//    os <<"minArea : "+ofToString(minArea) <<endl ;
+	//    if(facefinder.blobs.size()>0) os << "face detect OK"<<endl;
+	//    else os << "no face detected"<<endl;
+	//    os << "spacebar toggle gui" <<endl;
+	//    ofDrawBitmapString(os.str(),10,ofGetHeight()-50);
+	//    ofPopStyle();
 }
 void FaceTracking::drawFeatures(int i)
 {
@@ -306,12 +306,12 @@ void FaceTracking::drawMarkers(int i)
 }
 void FaceTracking::clear()
 {
-
+	
 }
 void FaceTracking::processTracking(int x, int y , int w, int h , ofTexture &tex)
 {
     facefinder.findHaarObjects(grayImage,x,y,w,h,minFaceAreaW,minFaceAreaH);
-///    if(facefinder.blobs.size()<=2 && facefinder.blobs.size()>0)
+	///    if(facefinder.blobs.size()<=2 && facefinder.blobs.size()>0)
     {
         for(int i = 0 ; i  < facefinder.blobs.size() ; i++)
         {
@@ -346,5 +346,5 @@ void FaceTracking::processTracking(int x, int y , int w, int h , ofTexture &tex)
 }
 void FaceTracking::exit()
 {
-
+	
 }

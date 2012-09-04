@@ -39,8 +39,8 @@ string PlayState::getName()
 //--------------------------------------------------------------
 void PlayState::setup(){
     
-//    ofSetLogLevel(OF_LOG_VERBOSE);
-
+	//    ofSetLogLevel(OF_LOG_VERBOSE);
+	
     
     // enable depth->video image calibration
     faceTracking.setup();
@@ -97,7 +97,7 @@ void PlayState::update(){
         faceTracking.faceOffset.height = getSharedData().panel.getValueF("faceOffsetH");
         for(int j = 0 ;j < NUM_PLAYER ; j++)
         {
-
+			
             feature[0] = &faceTracking.leftEye[j];
             feature[1] = &faceTracking.rightEye[j];
             feature[2] = &faceTracking.nose[j];
@@ -162,7 +162,7 @@ void PlayState::update(){
         }
         
     }
-
+	
 }
 
 
@@ -176,7 +176,7 @@ void PlayState::draw(){
     if(lastCapture.isAllocated())lastCapture.draw(0,0);
     if(bBox2D)
     {
-
+		
         
         faceTracking.drawFeaturesBlur(0);
         faceTracking.drawFeaturesBlur(1);
@@ -202,7 +202,10 @@ void PlayState::keyPressed(int key){
             
             if(bBox2D)
             {
-//                if(faceTracking.facefinder.blobs.size()<=2)
+                //TO-DO add clear box2d body and patricle when add new set of face feature
+                //****************************************
+                //****************************************
+				//                if(faceTracking.facefinder.blobs.size()<=2)
                 {
                     for(int i = 0 ; i < faceTracking.facefinder.blobs.size() ;i++)
                     {
@@ -237,10 +240,10 @@ void PlayState::keyPressed(int key){
         case OF_KEY_RETURN:
             //bBox2D = !bBox2D;
             countDown.start();
-
+			
             break;
         case OF_KEY_BACKSPACE:
-                        lastCapture.clear();
+			lastCapture.clear();
             bBox2D = false;
             break;
     }
