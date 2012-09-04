@@ -1,40 +1,35 @@
 #include "testApp.h"
+#include "IndexState.h"
+#include "SelectPlayerState.h"
 #include "PlayState.h"
 #include "EditState.h"
 const static string settingFileName = "config.xml";
 //--------------------------------------------------------------
 void testApp::setup(){
-        ofEnableAlphaBlending();
+	ofEnableAlphaBlending();
     ofxXmlSettings xml  = stateMachine.getSharedData().xml;
-    if(!xml.loadFile(settingFileName))
-    {
-        xml.addTag("DATA");
-        if(xml.pushTag("DATA"))
-        {
-            xml.addValue("COUNTER", stateMachine.getSharedData().counter);
-            xml.addValue("PATH", "./captures");
-            xml.addValue("DIGI", 6);
-            xml.popTag();
-        }
-        xml.saveFile(settingFileName);
-    }
-    else
-    {
-        if(xml.pushTag("DATA"))
-        {
-           stateMachine.getSharedData().counter = xml.getValue("COUNTER", 0);
-            stateMachine.getSharedData().path_to_save = xml.getValue("PATH", "./captures");
-            stateMachine.getSharedData().numDigi = xml.getValue("DIGI", 5);
-            ofDirectory dir;
-            if(dir.listDir(stateMachine.getSharedData().path_to_save)<1)
-            {
-                dir.createDirectory(stateMachine.getSharedData().path_to_save);
-            }
-            
-            xml.popTag();
-        }
-    }
-//    // setup shared data
+    if(xml.loadFile(settingFileName))
+	{
+		if(xml.pushTag("DATA"))
+		{
+			stateMachine.getSharedData().counter = xml.getValue("COUNTER", 0);
+			stateMachine.getSharedData().path_to_save = xml.getValue("CAPTURE_PATH", "./captures");
+			stateMachine.getSharedData().numDigi = xml.getValue("DIGI", 5);
+			ofDirectory dir;
+			if(dir.listDir(stateMachine.getSharedData().path_to_save)<1)
+			{
+				dir.createDirectory(stateMachine.getSharedData().path_to_save);
+			}
+			
+			xml.popTag();
+		}
+	}
+	else
+	{
+		ofLog(OF_LOG_ERROR,"Faile to load "+ settingFileName);
+	}
+    
+	//    // setup shared data
     ofxControlPanel::setBackgroundColor(simpleColor(30, 30, 60, 100));
 	ofxControlPanel::setTextColor(simpleColor(240, 50, 50, 255));
     stateMachine.getSharedData().panel.setup(ofGetWidth(),ofGetHeight());
@@ -67,12 +62,14 @@ void testApp::setup(){
     stateMachine.getSharedData().panel.addTextDropDown("LogLevel","LogLevel", 0, loglevel);
 	
 	// initialise state machine
+	stateMachine.addState(new IndexState());
+	stateMachine.addState(new SelectPlayerState());
 	stateMachine.addState(new PlayState());
 	stateMachine.addState(new EditState());
 	stateMachine.changeState("PlayState");
     stateMachine.getSharedData().panel.loadSettings("settings.xml");
     stateMachine.getSharedData().panel.hide();
-    stateMachine.getSharedData().numPlayer = SharedData::TWO;
+    stateMachine.getSharedData().numPlayer = 2;
     
 }
 
@@ -89,18 +86,17 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    
-
+    ofBackgroundGradient(ofColor::black, ofColor(50,50,50));
 }
 void testApp::exit()
 {
-//    if (stateMachine.getSharedData().xml.pushTag("DATA")) {
-//        stateMachine.getSharedData().xml.setValue("COUNTER", stateMachine.getSharedData().counter);
-//        stateMachine.getSharedData().xml.popTag();
-//        
-//        
-//    }
-//    stateMachine.getSharedData().xml.saveFile();
+	//    if (stateMachine.getSharedData().xml.pushTag("DATA")) {
+	//        stateMachine.getSharedData().xml.setValue("COUNTER", stateMachine.getSharedData().counter);
+	//        stateMachine.getSharedData().xml.popTag();
+	//        
+	//        
+	//    }
+	//    stateMachine.getSharedData().xml.saveFile();
 }
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
@@ -112,7 +108,7 @@ void testApp::keyPressed(int key){
         case OF_KEY_F2:
             stateMachine.changeState("EditState");
             break;
-            case 's':
+		case 's':
             stateMachine.getSharedData().panel.saveSettings();
             break;
     }

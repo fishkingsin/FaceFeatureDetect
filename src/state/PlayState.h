@@ -57,4 +57,10 @@ public:
     bool bCapture;
     CountDown countDown;
     ofImage lastCapture;
+	
+	ofFbo capturedScreen;
+	float ratio;
+	float screenWidth;
+		float screenHeight;
+	ofImage image;
 };

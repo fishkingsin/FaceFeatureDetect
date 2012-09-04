@@ -43,6 +43,7 @@ void PlayState::setup(){
 	
     
     // enable depth->video image calibration
+	image.loadImage("images/playstate.png");
     faceTracking.setup();
     getSharedData().panel.setWhichPanel("FaceTracking");
     getSharedData().panel.setWhichColumn(0);
@@ -52,8 +53,16 @@ void PlayState::setup(){
     getSharedData().panel.addSlider("faceOffsetY",faceTracking.faceOffset.y,1,512);
     getSharedData().panel.addSlider("faceOffsetW",faceTracking.faceOffset.width,1,512);
     getSharedData().panel.addSlider("faceOffsetH",faceTracking.faceOffset.height,1,512);
-    for(int j = 0 ;j < NUM_PLAYER ; j++)
+	ratio = (ofGetHeight()*1.0f)/(camH*1.0f);
+	
+	capturedScreen.allocate(camW,camH);
+	screenWidth = camW*ratio;
+
+	screenHeight = ofGetHeight();
+
+    for(int j = 0 ;j < MAX_PLAYER ; j++)
     {
+		
         getSharedData().panel.setWhichPanel("FaceTracking"+ofToString(j));
         feature[0] = &faceTracking.leftEye[j];
         feature[1] = &faceTracking.rightEye[j];
@@ -80,9 +89,10 @@ void PlayState::setup(){
     box2d.setup();
     bCapture = false;
     bBox2D = false;
-    countDown.setup(getSharedData().xml.getValue("SETTING::COUNTDOWN",1)*1000);
+    countDown.setup(getSharedData().xml.getValue("COUNTDOWN",1)*1000);
     ofAddListener(countDown.COUNTER_REACHED,this,&PlayState::Shot);
     ofAddListener(countDown.COMPLETE,this,&PlayState::completeShot);
+	
 }
 
 //--------------------------------------------------------------
@@ -95,7 +105,7 @@ void PlayState::update(){
         faceTracking.faceOffset.y = getSharedData().panel.getValueF("faceOffsetY");
         faceTracking.faceOffset.width = getSharedData().panel.getValueF("faceOffsetW");
         faceTracking.faceOffset.height = getSharedData().panel.getValueF("faceOffsetH");
-        for(int j = 0 ;j < NUM_PLAYER ; j++)
+        for(int j = 0 ;j < MAX_PLAYER ; j++)
         {
 			
             feature[0] = &faceTracking.leftEye[j];
@@ -116,7 +126,7 @@ void PlayState::update(){
                 
             }
         }
-        faceTracking.numPlayer = getSharedData().numPlayer;
+        
         faceTracking.update(bCapture);
     }
     else box2d.update();
@@ -125,25 +135,36 @@ void PlayState::update(){
     {
         lastCapture.setFromPixels(faceTracking.getPixels(),camW,camH,OF_IMAGE_COLOR);
         bCapture = false;
-        
-        char imagename[1024];
-        stringstream format;
-        
-        format <<"%0"<<getSharedData().numDigi<<"d."<<"jpg";
-        
-        sprintf(imagename, format.str().c_str(), getSharedData().counter);
-        cout << imagename;
-        faceTracking.savingFace(getSharedData().path_to_save+"/"+imagename);
-        getSharedData().lastFileNames.push_back(getSharedData().path_to_save+"/"+imagename);
+        for(int player = 0 ; player<getSharedData().numPlayer ; player++)
+		{
+			char imagename[1024];
+			stringstream format;
+			stringstream format2;
+			
+			if(player==1)format <<"%0"<<getSharedData().numDigi<<"d2_.jpg";
+			else format <<"%0"<<getSharedData().numDigi<<"d.jpg";
+			ofLog(OF_LOG_VERBOSE, "format ",format.str().data() );
+			sprintf(imagename, format.str().c_str(), getSharedData().counter);
+			char code[getSharedData().numDigi];
+			
+			format2 <<"%0"<<getSharedData().numDigi<<"d";
+			sprintf(code, format2.str().c_str(), getSharedData().counter);
+			
+			getSharedData().lastCode = code;
+			ofLog(OF_LOG_VERBOSE, "Exported file name = ",imagename );
+			ofLog(OF_LOG_VERBOSE, "Exported code = "+getSharedData().lastCode);
+			faceTracking.savingFace(player,getSharedData().path_to_save+"/"+imagename);
+			getSharedData().lastFileNames.push_back(getSharedData().path_to_save+"/"+imagename);
+		}
         getSharedData().counter++;  
         if (getSharedData().xml.pushTag("DATA")) {
-            getSharedData().xml.setValue("COUNTER", getSharedData().counter);
-            getSharedData().xml.popTag();
-            
-            
+			getSharedData().xml.setValue("COUNTER", getSharedData().counter);
+			getSharedData().xml.popTag();
+		
+		
         }
         getSharedData().xml.saveFile();
-        while(!getSharedData().lastFileNames.empty())
+        if(getSharedData().numPlayer==1)
         {
             string file_name = getSharedData().lastFileNames.back();
             FaceData faceData;
@@ -160,6 +181,26 @@ void PlayState::update(){
             //TO_DO load image and map the face on shoes;
             getSharedData().lastFileNames.pop_back();
         }
+		else
+		{
+			string file_name2 = getSharedData().lastFileNames.back();
+			getSharedData().lastFileNames.pop_back();
+			string file_name = getSharedData().lastFileNames.back();
+			getSharedData().lastFileNames.pop_back();
+            DoubleFaceData faceData;
+            faceData.setup(file_name, file_name2, "face_profile/settings_a.xml");
+            faceData.save();
+            faceData.setup(file_name, file_name2, "face_profile/settings_b.xml");
+            faceData.save();
+            faceData.setup(file_name, file_name2, "face_profile/settings_c.xml");
+            faceData.save();
+            faceData.setup(file_name, file_name2, "face_profile/settings_d.xml");
+            faceData.save();
+            faceData.setup(file_name, file_name2, "face_profile/settings_e.xml");
+            faceData.save();
+            //TO_DO load image and map the face on shoes;
+            //getSharedData().lastFileNames.pop_back();
+		}
         
     }
 	
@@ -168,7 +209,8 @@ void PlayState::update(){
 
 //--------------------------------------------------------------
 void PlayState::draw(){
-    
+    capturedScreen.begin();
+	ofClearAlpha();
     if(!bBox2D)
     {
         faceTracking.draw();
@@ -182,7 +224,11 @@ void PlayState::draw(){
         faceTracking.drawFeaturesBlur(1);
         box2d.draw();
     }
-    countDown.draw(ofGetWidth()/2 -100,ofGetHeight()/2 -100, 200,200);
+    
+	capturedScreen.end();
+	capturedScreen.draw(0.5*(ofGetWidth()-screenWidth),0,screenWidth,screenHeight);
+	image.draw(0,0);
+	countDown.draw(ofGetWidth()/2-100,0, 200,200);
 }
 
 void PlayState::stateExit() {
@@ -204,11 +250,13 @@ void PlayState::keyPressed(int key){
             {
                 //TO-DO add clear box2d body and patricle when add new set of face feature
                 //****************************************
+				box2d.clear();
                 //****************************************
-				//                if(faceTracking.facefinder.blobs.size()<=2)
-                {
-                    for(int i = 0 ; i < faceTracking.facefinder.blobs.size() ;i++)
-                    {
+				
+				for(int i = 0 ; i < faceTracking.facefinder.blobs.size() ;i++)
+				{
+					if(i<= MAX_PLAYER)
+					{
                         feature[0] = &faceTracking.leftEye[i];
                         feature[1] = &faceTracking.rightEye[i];
                         feature[2] = &faceTracking.nose[i];
@@ -226,10 +274,11 @@ void PlayState::keyPressed(int key){
                             float y = rect.y+(feature[j]->rect.y*scaleY);
                             float w = feature[j]->rect.width*scaleX;
                             float h = feature[j]->rect.height*scaleY;
-                            p.setup(box2d.box2d.getWorld(),x+(w*0.5),y+(h*0.5),w*0.5);
+                            p.setup(box2d.box2d[i].getWorld(),x+(w*0.5)*0.5,y+(h*0.5)*0.5,w*0.5*0.5);
                             p.setupTheCustomData(feature[j],&faceTracking.alphaMaskShader,scaleX,scaleY);
                             box2d.addParticle( p);
                         }
+						
                     }
                     
                 }

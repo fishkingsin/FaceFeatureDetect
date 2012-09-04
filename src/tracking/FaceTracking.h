@@ -49,7 +49,7 @@
 #define camH 480
 #define BUFFER_SIZE 256
 #define QUARTER_SIZE 0.25
-#define NUM_PLAYER 2
+#define MAX_PLAYER 2
 class FeatureData
 {
 public:
@@ -192,6 +192,7 @@ public:
         {
             blur->begin();
             {
+				ofClearAlpha();
                 draw(0,0);
             }
             blur->end();
@@ -245,8 +246,7 @@ public:
     void draw();
     void exit();
     void processTracking(int x, int y , int w, int h , ofTexture& tex);
-    void savingFace(string fn);
-    void savingFace2(string fn);
+    void savingFace(int nface, string fn);
     void drawFeatures(int i);
     void drawFeaturesBlur(int i);
     void drawMarkers(int i);
@@ -290,15 +290,15 @@ public:
     ofxCvGrayscaleImage 	grayImage;
     ofxCvGrayscaleImage 	grayImageFace;
 	
-    ofFbo faceBuffer[2];
-    ofMesh normFace[2];
-    ofPixels facePixels[2];
-    ofRectangle faceRect[2];
+    ofFbo faceBuffer[MAX_PLAYER];
+    ofMesh normFace[MAX_PLAYER];
+    ofPixels facePixels[MAX_PLAYER];
+    ofRectangle faceRect[MAX_PLAYER];
     
-    FaceFeature leftEye[2];
-    FaceFeature rightEye[2];
-    FaceFeature nose[2];
-    FaceFeature mouth[2];
+    FaceFeature leftEye[MAX_PLAYER];
+    FaceFeature rightEye[MAX_PLAYER];
+    FaceFeature nose[MAX_PLAYER];
+    FaceFeature mouth[MAX_PLAYER];
     
     ofShader alphaMaskBlurShader;
     
@@ -309,7 +309,6 @@ public:
     int minArea ,
 	minFaceAreaW ,
 	minFaceAreaH ;
-    int numPlayer;
 };
 
 

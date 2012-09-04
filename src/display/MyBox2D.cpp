@@ -35,22 +35,37 @@ void MyBox2D::setup()
 {
     // Box2d
     
-
-	box2d.init();
-	box2d.setGravity(0, 1);
-    box2d.createBounds(0,0,camW,camH);
+	for(int i = 0 ; i < MAX_PLAYER ; i++)
+	{
+	box2d[i].init();
+	box2d[i].setGravity(0, 0.5);
+    box2d[i].createBounds(camW*0.5*i,0,camW*0.5,camH);
 //	box2d.createGround();
-	box2d.setFPS(30);
+	box2d[i].setFPS(30);
+	}
 }
 void MyBox2D::update()
 {
-    box2d.update();	
+	for(int i = 0 ; i < MAX_PLAYER ; i++)
+	{
+		box2d[i].update();	
+	}
 }
 void MyBox2D::draw()
 {
+	for(int i = 0 ; i < MAX_PLAYER ; i++)
+	{
+	if(ofGetLogLevel()==OF_LOG_VERBOSE)
+	{
+		ofPushStyle();
+		box2d[i].draw();
+		ofPopStyle();
+	}
+	}
     for(int i=0; i<particles.size(); i++) {
 		particles[i].draw();
 	}   
+	
 }
 void MyBox2D::exit()
 {

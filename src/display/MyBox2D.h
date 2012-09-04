@@ -102,6 +102,7 @@ public:
     
 };
 
+
 class MyBox2D{
 public:
     void setup();
@@ -109,9 +110,18 @@ public:
     void draw();
     void exit();
     void addParticle(CustomParticle &p);
-    ofxBox2d box2d;
+    ofxBox2d box2d[MAX_PLAYER];
     vector <CustomParticle>		particles;
-    void clear(){};
+    void clear(){
+		while (!particles.empty())
+		{
+			
+			CustomParticle *p = &particles.back();
+			p->destroy();
+			particles.pop_back();
+		}
+
+	};
 };
 
 

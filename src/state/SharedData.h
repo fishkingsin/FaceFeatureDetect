@@ -42,13 +42,14 @@ public:
     int counter,numDigi;
     string path_to_save;
     vector <string>lastFileNames;
+	string lastCode;
     ofxXmlSettings xml;
 	ofImage loadedImage;
     ofxAutoControlPanel panel;
-    enum NUM_PALYER
-    {
-        ONE,TWO
-    };
-    NUM_PALYER numPlayer;
+//    enum NUM_PALYER
+//    {
+//        ONE,TWO
+//    };
+    int numPlayer;
     
 };

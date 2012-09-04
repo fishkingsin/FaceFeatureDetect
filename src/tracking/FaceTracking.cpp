@@ -76,7 +76,7 @@ void FaceTracking::setup()
         blurs[i].setScale(4);
         blurs[i].setRotation(0);
     }
-    for(int i = 0 ; i  < NUM_PLAYER ; i++)
+    for(int i = 0 ; i  < MAX_PLAYER ; i++)
     {
         faceBuffer[i].allocate(BUFFER_SIZE,BUFFER_SIZE,GL_RGB);
         facePixels[i].allocate(faceBuffer[i].getWidth(),faceBuffer[i].getHeight(),OF_IMAGE_COLOR);
@@ -131,7 +131,7 @@ void FaceTracking::setup()
     }";
     alphaMaskShader.setupShaderFromSource(GL_FRAGMENT_SHADER, shaderProgram);
     alphaMaskShader.linkProgram();
-    numPlayer = 0;
+    
     
 }
 void FaceTracking::update(bool bTrack)
@@ -174,16 +174,12 @@ void FaceTracking::update(bool bTrack)
         
     }
 }
-void FaceTracking::savingFace(string fn)
+void FaceTracking::savingFace(int nface , string fn)
 {
     
-    ofSaveImage(facePixels[0], fn);
+    ofSaveImage(facePixels[nface], fn);
 }
-void FaceTracking::savingFace2(string fn)
-{
-    
-    ofSaveImage(facePixels[1], fn);
-}
+
 void FaceTracking::draw()
 {
     ofSetColor(ofColor::white);
@@ -315,32 +311,35 @@ void FaceTracking::processTracking(int x, int y , int w, int h , ofTexture &tex)
     {
         for(int i = 0 ; i  < facefinder.blobs.size() ; i++)
         {
-            ofRectangle cur = facefinder.blobs[i].boundingRect;
-            faceRect[i].x = cur.x+faceOffset.x;
-            faceRect[i].y = cur.y+faceOffset.y;
-            faceRect[i].width = cur.width+faceOffset.width;
-            faceRect[i].height = cur.height+faceOffset.height;
-            
-            normFace[i].setTexCoord(0,ofVec2f(faceRect[i].x, faceRect[i].y));
-            normFace[i].setTexCoord(1,ofVec2f(faceRect[i].x+faceRect[i].width, faceRect[i].y));
-            normFace[i].setTexCoord(2,ofVec2f(faceRect[i].x+faceRect[i].width, faceRect[i].y+faceRect[i].height));
-            normFace[i].setTexCoord(3,ofVec2f(faceRect[i].x, faceRect[i].y+faceRect[i].height));
-            
-            faceBuffer[i].begin();	
-            tex.bind();
-            normFace[i].draw();
-            tex.unbind();
-            faceBuffer[i].end();
-            
-            faceBuffer[i].readToPixels(facePixels[i]);
-            colorImgFace.setFromPixels(facePixels[i].getPixels(),BUFFER_SIZE,BUFFER_SIZE);
-            grayImageFace = colorImgFace;
-            
-            leftEye[i].update(grayImageFace,faceBuffer[i].getTextureReference());
-            rightEye[i].update(grayImageFace,faceBuffer[i].getTextureReference());
-            nose[i].update(grayImageFace,faceBuffer[i].getTextureReference());
-            mouth[i].update(grayImageFace,faceBuffer[i].getTextureReference());
-        }
+			if(i<MAX_PLAYER)
+			{
+				ofRectangle cur = facefinder.blobs[i].boundingRect;
+				faceRect[i].x = cur.x+faceOffset.x;
+				faceRect[i].y = cur.y+faceOffset.y;
+				faceRect[i].width = cur.width+faceOffset.width;
+				faceRect[i].height = cur.height+faceOffset.height;
+				
+				normFace[i].setTexCoord(0,ofVec2f(faceRect[i].x, faceRect[i].y));
+				normFace[i].setTexCoord(1,ofVec2f(faceRect[i].x+faceRect[i].width, faceRect[i].y));
+				normFace[i].setTexCoord(2,ofVec2f(faceRect[i].x+faceRect[i].width, faceRect[i].y+faceRect[i].height));
+				normFace[i].setTexCoord(3,ofVec2f(faceRect[i].x, faceRect[i].y+faceRect[i].height));
+				
+				faceBuffer[i].begin();	
+				tex.bind();
+				normFace[i].draw();
+				tex.unbind();
+				faceBuffer[i].end();
+				
+				faceBuffer[i].readToPixels(facePixels[i]);
+				colorImgFace.setFromPixels(facePixels[i].getPixels(),BUFFER_SIZE,BUFFER_SIZE);
+				grayImageFace = colorImgFace;
+				
+				leftEye[i].update(grayImageFace,faceBuffer[i].getTextureReference());
+				rightEye[i].update(grayImageFace,faceBuffer[i].getTextureReference());
+				nose[i].update(grayImageFace,faceBuffer[i].getTextureReference());
+				mouth[i].update(grayImageFace,faceBuffer[i].getTextureReference());
+			}
+		}
         
     }
 }

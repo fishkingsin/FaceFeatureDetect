@@ -192,6 +192,8 @@
 		0cf0aa3895d28e97d8a1e4a938976234 /* ground_truth.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ground_truth.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/ground_truth.h; sourceTree = SOURCE_ROOT; };
 		114b872696817cc33990fc83feb1259e /* imgproc.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = imgproc.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/imgproc/imgproc.hpp; sourceTree = SOURCE_ROOT; };
 		1B84F1EB15F0C11F002B8AD4 /* settings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = settings.xml; path = bin/data/settings.xml; sourceTree = "<group>"; };
+		1BB00C2615F5E5C00028628D /* IndexState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexState.h; sourceTree = "<group>"; };
+		1BB00C2715F5E64C0028628D /* SelectPlayerState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectPlayerState.h; sourceTree = "<group>"; };
 		1BC0074815F59931005AD984 /* CountDown.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CountDown.cpp; sourceTree = "<group>"; };
 		1BC0074915F59931005AD984 /* CountDown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountDown.h; sourceTree = "<group>"; };
 		1BC0074D15F59F5E005AD984 /* ofxTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTimer.cpp; sourceTree = "<group>"; };
@@ -1166,11 +1168,13 @@
 		516DF7AB15EFA4D7001F9898 /* state */ = {
 			isa = PBXGroup;
 			children = (
+				1BB00C2715F5E64C0028628D /* SelectPlayerState.h */,
 				516DF7AC15EFA4D7001F9898 /* EditState.cpp */,
 				516DF7AD15EFA4D7001F9898 /* EditState.h */,
 				516DF7AE15EFA4D7001F9898 /* PlayState.cpp */,
 				516DF7AF15EFA4D7001F9898 /* PlayState.h */,
 				516DF7B015EFA4D7001F9898 /* SharedData.h */,
+				1BB00C2615F5E5C00028628D /* IndexState.h */,
 			);
 			path = state;
 			sourceTree = "<group>";

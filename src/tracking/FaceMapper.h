@@ -50,6 +50,12 @@ public:
     {
         
     }
+	~FaceData()
+    {
+		backgroundImage.clear();
+		overlayImage.clear();
+		faceImage.clear();
+    }
     void setup(string img_fn, string setting_fn)
     {
 
@@ -68,7 +74,7 @@ public:
                 xml.setValue("PREFIX","a");
                 xml.setValue("BACKGROUND","background.png");
                 xml.setValue("OVERLAY","overlay.png");
-                
+				xml.popTag();
             }
             xml.saveFile(setting_fn);
         }
@@ -126,6 +132,10 @@ class DoubleFaceData : public FaceData
 public:
     ofxGLWarper warpper2;
     ofImage faceImage2;
+	~DoubleFaceData()
+    {
+		faceImage2.clear();
+    }
     void setup(string img_fn,string img_fn2, string setting_fn)
     {
         faceImage2.clear();
